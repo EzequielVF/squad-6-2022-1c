@@ -15,7 +15,7 @@ public class Tarea {
     private String description;
 
     public Tarea(int id, String description) {
-        //this.id = id;
+        this.id = id;
         this.description = description;
     }
 
