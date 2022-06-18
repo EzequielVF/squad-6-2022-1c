@@ -6,13 +6,13 @@ import javax.persistence.*;
 public class Tarea {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    //@GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    private String description;
 
     public Tarea(){
-    }
 
-    private String description;
+    }
 
     public Tarea(int id, String description) {
         this.id = id;
@@ -23,11 +23,20 @@ public class Tarea {
         return this.id;
     }
 
+    public void setId(int id) { this.id = id; }
+
     public void updateDescription(String newDescription){
         this.description = newDescription;
     }
 
     public String getDescription(){
         return this.description;
+    }
+
+    @Override
+    public String toString() {
+        return "Tarea{" +
+                "id=" + id +
+                ", description='" + description+"}";
     }
 }
