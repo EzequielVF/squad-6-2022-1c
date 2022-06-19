@@ -15,6 +15,6 @@ public class ProyectosApplication {
 
 	@RequestMapping("/")
 	public String index(){
-		return "index.html";
+		return "html/index.html";
 	}
 }

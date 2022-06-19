@@ -14,7 +14,9 @@ public class RecursoService {
     private RecursoRepository recursoRepository;
 
     public void addRecurso(Recurso recurso) {
-        recursoRepository.save(recurso);
+        if (!recursoRepository.findById(recurso.getId()).isPresent()){
+            recursoRepository.save(recurso);
+        }
     }
 
     public Recurso getRecurso(int id) {
@@ -25,7 +27,8 @@ public class RecursoService {
         return (ArrayList<Recurso>) recursoRepository.findAll();
     }
 
-    public void updateTarea(int id, Recurso recurso) {
+    public void updateRecurso(int id, Recurso recurso) {
+        recursoRepository.deleteById(id);
         recursoRepository.save(recurso);
     }
 

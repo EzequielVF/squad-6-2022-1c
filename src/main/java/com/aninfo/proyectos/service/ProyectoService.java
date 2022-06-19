@@ -4,8 +4,6 @@ import com.aninfo.proyectos.model.Proyecto;
 import com.aninfo.proyectos.model.Recurso;
 import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.repository.ProyectoRepository;
-import com.aninfo.proyectos.repository.RecursoRepository;
-import com.aninfo.proyectos.repository.TareaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -17,13 +15,15 @@ public class ProyectoService {
     private ProyectoRepository proyectoRepository;
 
     @Autowired
-    private TareaRepository tareaRepository;
+    private final TareaService tareaService = new TareaService();
 
     @Autowired
-    private RecursoRepository recursoRepository;
+    private final RecursoService recursoService = new RecursoService();
 
     public void addProyecto(Proyecto proyecto) {
-        proyectoRepository.save(proyecto);
+        if (!proyectoRepository.findById(proyecto.getId()).isPresent()){
+            proyectoRepository.save(proyecto);
+        }
     }
 
     public Proyecto getProyecto(int id) {
@@ -35,6 +35,7 @@ public class ProyectoService {
     }
 
     public void updateProyecto(int id, Proyecto proyecto) {
+        proyectoRepository.deleteById(id);
         proyectoRepository.save(proyecto);
     }
 
@@ -46,7 +47,7 @@ public class ProyectoService {
         Proyecto proyecto = proyectoRepository.findById(id).get();
         proyecto.addTarea(tarea);
         tarea.setIdProyecto(id);
-        tareaRepository.save(tarea);
+        tareaService.addTarea(tarea);
         proyectoRepository.save(proyecto);
     }
 
@@ -54,7 +55,47 @@ public class ProyectoService {
         Proyecto proyecto = proyectoRepository.findById(id).get();
         proyecto.addRecurso(recurso);
         recurso.setIdProyecto(id);
-        recursoRepository.save(recurso);
+        recursoService.addRecurso(recurso);
         proyectoRepository.save(proyecto);
+    }
+
+    public void deleteTareaFromProyecto(int id_proyecto, int id_tarea) {
+        Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
+        proyecto.deleteTarea(id_tarea);
+        tareaService.deleteTarea(id_tarea);
+        proyectoRepository.save(proyecto);
+    }
+
+    public void deleteTareaRecursoProyecto(int id_proyecto, int id_recurso) {
+        Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
+        proyecto.deleteRecurso(id_recurso);
+        recursoService.deleteRecurso(id_recurso);
+        proyectoRepository.save(proyecto);
+    }
+
+    public void updateTareaFromProyecto(int id_proyecto, int id_tarea, Tarea tarea) {
+        Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
+        tareaService.updateTarea(id_tarea, tarea);
+        proyecto.deleteTarea(id_tarea);
+        proyecto.addTarea(tarea);
+        proyectoRepository.save(proyecto);
+    }
+
+    public void updateRecursoFromProyecto(int id_proyecto, int id_recurso, Recurso recurso) {
+        Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
+        recursoService.updateRecurso(id_recurso, recurso);
+        proyecto.deleteRecurso(id_recurso);
+        proyecto.addRecurso(recurso);
+        proyectoRepository.save(proyecto);
+    }
+
+    public ArrayList<Tarea> getAllTareasFromProyecto(int id){
+        Proyecto proyecto = proyectoRepository.findById(id).get();
+        return proyecto.getTareas();
+    }
+
+    public ArrayList<Recurso> getAllRecursosFromProyecto(int id){
+        Proyecto proyecto = proyectoRepository.findById(id).get();
+        return proyecto.getRecursos();
     }
 }

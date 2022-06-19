@@ -13,7 +13,9 @@ public class TareaService {
     private TareaRepository tareaRepository;
 
     public void addTarea(Tarea tarea) {
-        tareaRepository.save(tarea);
+        if (!tareaRepository.findById(tarea.getId()).isPresent()){
+            tareaRepository.save(tarea);
+        }
     }
 
     public Tarea getTarea(int id) {
@@ -25,6 +27,7 @@ public class TareaService {
     }
 
     public void updateTarea(int id, Tarea tarea) {
+        tareaRepository.deleteById(id);
         tareaRepository.save(tarea);
     }
 

@@ -1,10 +1,8 @@
 package com.aninfo.proyectos.controller;
 import com.aninfo.proyectos.model.Recurso;
-import com.aninfo.proyectos.model.Tarea;
+import org.springframework.web.bind.annotation.*;
 import com.aninfo.proyectos.service.RecursoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 
@@ -25,7 +23,6 @@ public class RecursoController {
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/recursos")
-    @ResponseStatus(HttpStatus.CREATED)
     public void addRecurso(@RequestBody Recurso recurso){ recursoService.addRecurso(recurso); }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/recursos/{id}")
@@ -33,4 +30,8 @@ public class RecursoController {
         recursoService.deleteRecurso(id);
     }
 
+    @RequestMapping(method=RequestMethod.PUT, value="/recursos/{id}")
+    public void updateRecurso(@PathVariable("id") int id, @RequestBody Recurso recurso){
+        recursoService.updateRecurso(id, recurso);
+    }
 }

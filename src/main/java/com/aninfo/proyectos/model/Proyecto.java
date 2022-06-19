@@ -1,11 +1,11 @@
 package com.aninfo.proyectos.model;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import java.util.ArrayList;
-import java.util.List;
 import javax.persistence.*;
+import javax.persistence.Id;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.List;
+import java.util.ArrayList;
 
 @Entity
 public class Proyecto {
@@ -62,8 +62,8 @@ public class Proyecto {
         tareas.removeIf(tarea -> tarea.getId() == id);
     }
 
-    public List<Tarea> getTareas(){
-        return tareas;
+    public ArrayList<Tarea> getTareas(){
+        return new ArrayList<>(tareas);
     }
 
     public void addRecurso(Recurso recurso){
@@ -74,7 +74,7 @@ public class Proyecto {
         recursos.removeIf(recurso -> recurso.getId() == id);
     }
 
-    public List<Recurso> getRecurso(){
-        return recursos;
+    public ArrayList<Recurso> getRecursos() {
+        return new ArrayList<>(recursos);
     }
 }
