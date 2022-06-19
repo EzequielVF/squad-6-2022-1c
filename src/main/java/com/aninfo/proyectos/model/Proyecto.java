@@ -2,6 +2,10 @@ package com.aninfo.proyectos.model;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.*;
 
 @Entity
 public class Proyecto {
@@ -11,8 +15,13 @@ public class Proyecto {
     private String name;
     private String description;
 
-    public Proyecto(){
+    @OneToMany(cascade = {CascadeType.REMOVE})
+    private final List<Tarea> tareas = new ArrayList<>();
 
+    @OneToMany(cascade = {CascadeType.REMOVE})
+    private final List<Recurso> recursos = new ArrayList<>();
+
+    public Proyecto(){
     }
 
     public Proyecto(int id, String name, String description){
@@ -43,5 +52,29 @@ public class Proyecto {
 
     public void setDescription(String description){
         this.description = description;
+    }
+
+    public void addTarea(Tarea tarea){
+        tareas.add(tarea);
+    }
+
+    public void deleteTarea(int id){
+        tareas.removeIf(tarea -> tarea.getId() == id);
+    }
+
+    public List<Tarea> getTareas(){
+        return tareas;
+    }
+
+    public void addRecurso(Recurso recurso){
+        recursos.add(recurso);
+    }
+
+    public void deleteRecurso(int id){
+        recursos.removeIf(recurso -> recurso.getId() == id);
+    }
+
+    public List<Recurso> getRecurso(){
+        return recursos;
     }
 }

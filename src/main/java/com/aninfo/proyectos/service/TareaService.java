@@ -4,9 +4,7 @@ import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.repository.TareaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class TareaService {

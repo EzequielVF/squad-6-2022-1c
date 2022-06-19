@@ -5,10 +5,12 @@ import javax.persistence.Id;
 
 @Entity
 public class Recurso {
+
     @Id
     private int id;
     private String name;
     private String description;
+    private int id_proyecto;
 
     public Recurso(int id, String name, String description) {
         this.id = id;
@@ -32,6 +34,10 @@ public class Recurso {
         this.description = description;
     }
 
+    public void setIdProyecto(int id_proyecto){
+        this.id_proyecto = id_proyecto;
+    }
+
     public int getId(){
         return this.id;
     }
@@ -42,5 +48,9 @@ public class Recurso {
 
     public String getDescription(){
         return this.description;
+    }
+
+    public int getIdProyecto(){
+        return this.id_proyecto;
     }
 }
