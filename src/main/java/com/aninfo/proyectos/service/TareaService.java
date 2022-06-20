@@ -1,5 +1,6 @@
 package com.aninfo.proyectos.service;
 
+import com.aninfo.proyectos.exception.NoExisteTareaException;
 import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.repository.TareaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +19,11 @@ public class TareaService {
         }
     }
 
-    public Tarea getTarea(int id) {
-        return tareaRepository.findById(id).get();
+    public Tarea getTarea(int id) throws NoExisteTareaException {
+        if (tareaRepository.findById(id).isPresent()){
+            return tareaRepository.findById(id).get();
+        }
+        throw new NoExisteTareaException();
     }
 
     public ArrayList<Tarea> getAllTareas() {

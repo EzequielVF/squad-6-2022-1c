@@ -1,5 +1,6 @@
 package com.aninfo.proyectos.controller;
 
+import com.aninfo.proyectos.exception.NoExisteTareaException;
 import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.service.TareaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,7 @@ public class TareaController {
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/tareas/{id}")
-    public Tarea getTarea(@PathVariable("id") int id){
+    public Tarea getTarea(@PathVariable("id") int id) throws NoExisteTareaException {
         return tareaService.getTarea(id);
     }
 

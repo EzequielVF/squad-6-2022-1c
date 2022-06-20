@@ -1,4 +1,5 @@
 package com.aninfo.proyectos.controller;
+import com.aninfo.proyectos.exception.NoExisteRecursoException;
 import com.aninfo.proyectos.model.Recurso;
 import org.springframework.web.bind.annotation.*;
 import com.aninfo.proyectos.service.RecursoService;
@@ -18,7 +19,7 @@ public class RecursoController {
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/recursos/{id}")
-    public Recurso getRecurso(@PathVariable("id") int id){
+    public Recurso getRecurso(@PathVariable("id") int id) throws NoExisteRecursoException {
         return recursoService.getRecurso(id);
     }
 

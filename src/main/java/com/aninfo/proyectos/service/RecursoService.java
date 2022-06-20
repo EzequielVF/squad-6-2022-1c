@@ -1,5 +1,6 @@
 package com.aninfo.proyectos.service;
 
+import com.aninfo.proyectos.exception.NoExisteRecursoException;
 import com.aninfo.proyectos.model.Recurso;
 import com.aninfo.proyectos.repository.RecursoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +20,11 @@ public class RecursoService {
         }
     }
 
-    public Recurso getRecurso(int id) {
-        return recursoRepository.findById(id).get();
+    public Recurso getRecurso(int id) throws NoExisteRecursoException {
+        if (recursoRepository.findById(id).isPresent()){
+            return recursoRepository.findById(id).get();
+        }
+        throw new NoExisteRecursoException();
     }
 
     public ArrayList<Recurso> getAllRecursos() {

@@ -1,5 +1,6 @@
 package com.aninfo.proyectos.controller;
 
+import com.aninfo.proyectos.exception.NoExisteProyectoException;
 import com.aninfo.proyectos.model.Proyecto;
 import com.aninfo.proyectos.model.Recurso;
 import com.aninfo.proyectos.model.Tarea;
@@ -20,7 +21,7 @@ public class ProyectoController {
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}")
-    public Proyecto getProyecto(@PathVariable("id") int id){
+    public Proyecto getProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
         return proyectoService.getProyecto(id);
     }
 
@@ -33,22 +34,22 @@ public class ProyectoController {
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/proyectos/{id}/tareas")
-    public void addTareaToProyecto(@PathVariable("id") int id, @RequestBody Tarea tarea){
+    public void addTareaToProyecto(@PathVariable("id") int id, @RequestBody Tarea tarea) throws NoExisteProyectoException {
         proyectoService.addTareaToProyecto(id, tarea);
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/proyectos/{id}/recursos")
-    public void addRecursoToProyecto(@PathVariable("id") int id, @RequestBody Recurso recurso){
+    public void addRecursoToProyecto(@PathVariable("id") int id, @RequestBody Recurso recurso) throws NoExisteProyectoException {
         proyectoService.addRecursoToProyecto(id, recurso);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/tareas/{id2}")
-    public void deleteTareaFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_tarea){
+    public void deleteTareaFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_tarea) throws NoExisteProyectoException {
         proyectoService.deleteTareaFromProyecto(id_proyecto, id_tarea);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/recursos/{id2}")
-    public void deleteRecursoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_recurso) {
+    public void deleteRecursoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_recurso) throws NoExisteProyectoException {
         proyectoService.deleteTareaRecursoProyecto(id_proyecto, id_recurso);
     }
 
@@ -58,22 +59,22 @@ public class ProyectoController {
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/tareas/{id2}")
-    public void updateTareaFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_tarea, @RequestBody Tarea tarea){
+    public void updateTareaFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_tarea, @RequestBody Tarea tarea) throws NoExisteProyectoException {
         proyectoService.updateTareaFromProyecto(id_proyecto, id_tarea, tarea);
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/recursos/{id2}")
-    public void updateRecursoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_recurso, @RequestBody Recurso recurso){
+    public void updateRecursoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_recurso, @RequestBody Recurso recurso) throws NoExisteProyectoException {
         proyectoService.updateRecursoFromProyecto(id_proyecto, id_recurso, recurso);
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/tareas")
-    public ArrayList<Tarea> getAllTareasFromProyecto(@PathVariable("id") int id){
+    public ArrayList<Tarea> getAllTareasFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
         return proyectoService.getAllTareasFromProyecto(id);
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/recursos")
-    public ArrayList<Recurso> getAllRecursosFromProyecto(@PathVariable("id") int id){
+    public ArrayList<Recurso> getAllRecursosFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
         return proyectoService.getAllRecursosFromProyecto(id);
     }
 }
