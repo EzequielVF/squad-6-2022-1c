@@ -4,7 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 
 @Entity
-public class Recurso {
+public class Empleado {
 
     @Id
     private int id;
@@ -12,13 +12,13 @@ public class Recurso {
     private String description;
     private int id_proyecto;
 
-    public Recurso(int id, String name, String description) {
+    public Empleado(int id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
     }
 
-    public Recurso() {
+    public Empleado() {
 
     }
 

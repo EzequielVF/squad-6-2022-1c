@@ -19,7 +19,7 @@ public class Proyecto {
     private final List<Tarea> tareas = new ArrayList<>();
 
     @OneToMany(cascade = {CascadeType.REMOVE})
-    private final List<Recurso> recursos = new ArrayList<>();
+    private final List<Empleado> empleados = new ArrayList<>();
 
     public Proyecto(){
     }
@@ -66,15 +66,15 @@ public class Proyecto {
         return new ArrayList<>(tareas);
     }
 
-    public void addRecurso(Recurso recurso){
-        recursos.add(recurso);
+    public void addRecurso(Empleado empleado){
+        empleados.add(empleado);
     }
 
     public void deleteRecurso(int id){
-        recursos.removeIf(recurso -> recurso.getId() == id);
+        empleados.removeIf(recurso -> recurso.getId() == id);
     }
 
-    public ArrayList<Recurso> getRecursos() {
-        return new ArrayList<>(recursos);
+    public ArrayList<Empleado> getRecursos() {
+        return new ArrayList<>(empleados);
     }
 }

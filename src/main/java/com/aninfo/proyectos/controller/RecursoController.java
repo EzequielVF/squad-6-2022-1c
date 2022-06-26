@@ -1,8 +1,8 @@
 package com.aninfo.proyectos.controller;
-import com.aninfo.proyectos.exception.NoExisteRecursoException;
-import com.aninfo.proyectos.model.Recurso;
+import com.aninfo.proyectos.exception.NoExisteEmpleadoException;
+import com.aninfo.proyectos.model.Empleado;
 import org.springframework.web.bind.annotation.*;
-import com.aninfo.proyectos.service.RecursoService;
+import com.aninfo.proyectos.service.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -11,28 +11,28 @@ import java.util.ArrayList;
 public class RecursoController {
 
     @Autowired
-    private final RecursoService recursoService = new RecursoService();
+    private final EmpleadoService empleadoService = new EmpleadoService();
 
     @RequestMapping(method= RequestMethod.GET, value="/recursos")
-    public ArrayList<Recurso> getAllRecursos(){
-        return recursoService.getAllRecursos();
+    public ArrayList<Empleado> getAllRecursos(){
+        return empleadoService.getAllRecursos();
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/recursos/{id}")
-    public Recurso getRecurso(@PathVariable("id") int id) throws NoExisteRecursoException {
-        return recursoService.getRecurso(id);
+    public Empleado getRecurso(@PathVariable("id") int id) throws NoExisteEmpleadoException {
+        return empleadoService.getRecurso(id);
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/recursos")
-    public void addRecurso(@RequestBody Recurso recurso){ recursoService.addRecurso(recurso); }
+    public void addRecurso(@RequestBody Empleado empleado){ empleadoService.addRecurso(empleado); }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/recursos/{id}")
     public void deleteRecurso(@PathVariable("id") int id){
-        recursoService.deleteRecurso(id);
+        empleadoService.deleteRecurso(id);
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="/recursos/{id}")
-    public void updateRecurso(@PathVariable("id") int id, @RequestBody Recurso recurso){
-        recursoService.updateRecurso(id, recurso);
+    public void updateRecurso(@PathVariable("id") int id, @RequestBody Empleado empleado){
+        empleadoService.updateRecurso(id, empleado);
     }
 }

@@ -2,7 +2,7 @@ package com.aninfo.proyectos.controller;
 
 import com.aninfo.proyectos.exception.NoExisteProyectoException;
 import com.aninfo.proyectos.model.Proyecto;
-import com.aninfo.proyectos.model.Recurso;
+import com.aninfo.proyectos.model.Empleado;
 import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.service.ProyectoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,8 +39,8 @@ public class ProyectoController {
     }
 
     @RequestMapping(method=RequestMethod.POST, value="/proyectos/{id}/recursos")
-    public void addRecursoToProyecto(@PathVariable("id") int id, @RequestBody Recurso recurso) throws NoExisteProyectoException {
-        proyectoService.addRecursoToProyecto(id, recurso);
+    public void addRecursoToProyecto(@PathVariable("id") int id, @RequestBody Empleado empleado) throws NoExisteProyectoException {
+        proyectoService.addRecursoToProyecto(id, empleado);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/tareas/{id2}")
@@ -64,8 +64,8 @@ public class ProyectoController {
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/recursos/{id2}")
-    public void updateRecursoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_recurso, @RequestBody Recurso recurso) throws NoExisteProyectoException {
-        proyectoService.updateRecursoFromProyecto(id_proyecto, id_recurso, recurso);
+    public void updateRecursoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_recurso, @RequestBody Empleado empleado) throws NoExisteProyectoException {
+        proyectoService.updateRecursoFromProyecto(id_proyecto, id_recurso, empleado);
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/tareas")
@@ -74,7 +74,7 @@ public class ProyectoController {
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/recursos")
-    public ArrayList<Recurso> getAllRecursosFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
+    public ArrayList<Empleado> getAllRecursosFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
         return proyectoService.getAllRecursosFromProyecto(id);
     }
 }
