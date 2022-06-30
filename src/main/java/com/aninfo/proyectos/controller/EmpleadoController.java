@@ -23,10 +23,10 @@ public class EmpleadoController {
         return empleadoService.getEmpleado(id);
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/recursos")
+    @RequestMapping(method=RequestMethod.POST, value="/empleados")
     public void addEmpleado(@RequestBody Empleado empleado){ empleadoService.addEmpleado(empleado); }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/recursos/{id}")
+    @RequestMapping(method=RequestMethod.DELETE, value="/empleados/{id}")
     public void deleteEmpleado(@PathVariable("id") int id){
         empleadoService.deleteEmpleado(id);
     }

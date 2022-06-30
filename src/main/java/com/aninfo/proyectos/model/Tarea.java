@@ -15,10 +15,11 @@ public class Tarea {
 
     }
 
-    public Tarea(int id, String name, String description) {
+    public Tarea(int id, String name, String description, int id_proyecto) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.id_proyecto = id_proyecto;
     }
 
     public int getId(){

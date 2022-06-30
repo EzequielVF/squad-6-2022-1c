@@ -12,10 +12,11 @@ public class Empleado {
     private String description;
     private int id_proyecto;
 
-    public Empleado(int id, String name, String description) {
+    public Empleado(int id, String name, String description, int id_proyecto) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.id_proyecto = id_proyecto;
     }
 
     public Empleado() {
