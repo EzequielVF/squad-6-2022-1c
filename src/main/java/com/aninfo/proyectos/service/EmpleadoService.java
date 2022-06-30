@@ -14,29 +14,29 @@ public class EmpleadoService {
     @Autowired
     private EmpleadoRepository empleadoRepository;
 
-    public void addRecurso(Empleado empleado) {
+    public void addEmpleado(Empleado empleado) {
         if (!empleadoRepository.findById(empleado.getId()).isPresent()){
             empleadoRepository.save(empleado);
         }
     }
 
-    public Empleado getRecurso(int id) throws NoExisteEmpleadoException {
+    public Empleado getEmpleado(int id) throws NoExisteEmpleadoException {
         if (empleadoRepository.findById(id).isPresent()){
             return empleadoRepository.findById(id).get();
         }
         throw new NoExisteEmpleadoException();
     }
 
-    public ArrayList<Empleado> getAllRecursos() {
+    public ArrayList<Empleado> getAllEmpleados() {
         return (ArrayList<Empleado>) empleadoRepository.findAll();
     }
 
-    public void updateRecurso(int id, Empleado empleado) {
+    public void updateEmpleado(int id, Empleado empleado) {
         empleadoRepository.deleteById(id);
         empleadoRepository.save(empleado);
     }
 
-    public void deleteRecurso(int id){
+    public void deleteEmpleado(int id){
         empleadoRepository.deleteById(id);
     }
 }

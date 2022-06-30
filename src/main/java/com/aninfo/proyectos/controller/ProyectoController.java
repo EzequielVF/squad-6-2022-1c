@@ -38,9 +38,9 @@ public class ProyectoController {
         proyectoService.addTareaToProyecto(id, tarea);
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/proyectos/{id}/recursos")
-    public void addRecursoToProyecto(@PathVariable("id") int id, @RequestBody Empleado empleado) throws NoExisteProyectoException {
-        proyectoService.addRecursoToProyecto(id, empleado);
+    @RequestMapping(method=RequestMethod.POST, value="/proyectos/{id}/empleados")
+    public void addEmpleadoToProyecto(@PathVariable("id") int id, @RequestBody Empleado empleado) throws NoExisteProyectoException {
+        proyectoService.addEmpleadoToProyecto(id, empleado);
     }
 
     @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/tareas/{id2}")
@@ -48,9 +48,9 @@ public class ProyectoController {
         proyectoService.deleteTareaFromProyecto(id_proyecto, id_tarea);
     }
 
-    @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/recursos/{id2}")
-    public void deleteRecursoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_recurso) throws NoExisteProyectoException {
-        proyectoService.deleteTareaRecursoProyecto(id_proyecto, id_recurso);
+    @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/empleados/{id2}")
+    public void deleteEmpleadoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_empleado) throws NoExisteProyectoException {
+        proyectoService.deleteEmpleadoFromProyecto(id_proyecto, id_empleado);
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id}")
@@ -63,9 +63,9 @@ public class ProyectoController {
         proyectoService.updateTareaFromProyecto(id_proyecto, id_tarea, tarea);
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/recursos/{id2}")
-    public void updateRecursoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_recurso, @RequestBody Empleado empleado) throws NoExisteProyectoException {
-        proyectoService.updateRecursoFromProyecto(id_proyecto, id_recurso, empleado);
+    @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/empleados/{id2}")
+    public void updateEmpleadoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_empleado, @RequestBody Empleado empleado) throws NoExisteProyectoException {
+        proyectoService.updateEmpleadoFromProyecto(id_proyecto, id_empleado, empleado);
     }
 
     @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/tareas")
@@ -73,8 +73,8 @@ public class ProyectoController {
         return proyectoService.getAllTareasFromProyecto(id);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/recursos")
-    public ArrayList<Empleado> getAllRecursosFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
-        return proyectoService.getAllRecursosFromProyecto(id);
+    @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/empleados")
+    public ArrayList<Empleado> getAllEmpleadosFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
+        return proyectoService.getAllEmpleadosFromProyecto(id);
     }
 }

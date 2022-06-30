@@ -66,15 +66,15 @@ public class Proyecto {
         return new ArrayList<>(tareas);
     }
 
-    public void addRecurso(Empleado empleado){
+    public void addEmpleado(Empleado empleado){
         empleados.add(empleado);
     }
 
-    public void deleteRecurso(int id){
+    public void deleteEmpleado(int id){
         empleados.removeIf(recurso -> recurso.getId() == id);
     }
 
-    public ArrayList<Empleado> getRecursos() {
+    public ArrayList<Empleado> getEmpleados() {
         return new ArrayList<>(empleados);
     }
 }

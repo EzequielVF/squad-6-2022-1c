@@ -58,14 +58,14 @@ public class ProyectoService {
         proyectoRepository.save(proyecto);
     }
 
-    public void addRecursoToProyecto(int id, Empleado empleado) throws NoExisteProyectoException {
+    public void addEmpleadoToProyecto(int id, Empleado empleado) throws NoExisteProyectoException {
         if (!proyectoRepository.findById(id).isPresent()){
             throw new NoExisteProyectoException();
         }
         Proyecto proyecto = proyectoRepository.findById(id).get();
-        proyecto.addRecurso(empleado);
+        proyecto.addEmpleado(empleado);
         empleado.setIdProyecto(id);
-        empleadoService.addRecurso(empleado);
+        empleadoService.addEmpleado(empleado);
         proyectoRepository.save(proyecto);
     }
 
@@ -79,13 +79,13 @@ public class ProyectoService {
         proyectoRepository.save(proyecto);
     }
 
-    public void deleteTareaRecursoProyecto(int id_proyecto, int id_recurso) throws NoExisteProyectoException {
+    public void deleteEmpleadoFromProyecto(int id_proyecto, int id_empleado) throws NoExisteProyectoException {
         if (!proyectoRepository.findById(id_proyecto).isPresent()){
             throw new NoExisteProyectoException();
         }
         Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
-        proyecto.deleteRecurso(id_recurso);
-        empleadoService.deleteRecurso(id_recurso);
+        proyecto.deleteEmpleado(id_empleado);
+        empleadoService.deleteEmpleado(id_empleado);
         proyectoRepository.save(proyecto);
     }
 
@@ -100,14 +100,14 @@ public class ProyectoService {
         proyectoRepository.save(proyecto);
     }
 
-    public void updateRecursoFromProyecto(int id_proyecto, int id_recurso, Empleado empleado) throws NoExisteProyectoException {
+    public void updateEmpleadoFromProyecto(int id_proyecto, int id_empleado, Empleado empleado) throws NoExisteProyectoException {
         if (!proyectoRepository.findById(id_proyecto).isPresent()){
             throw new NoExisteProyectoException();
         }
         Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
-        empleadoService.updateRecurso(id_recurso, empleado);
-        proyecto.deleteRecurso(id_recurso);
-        proyecto.addRecurso(empleado);
+        empleadoService.updateEmpleado(id_empleado, empleado);
+        proyecto.deleteEmpleado(id_empleado);
+        proyecto.addEmpleado(empleado);
         proyectoRepository.save(proyecto);
     }
 
@@ -119,11 +119,11 @@ public class ProyectoService {
         return proyecto.getTareas();
     }
 
-    public ArrayList<Empleado> getAllRecursosFromProyecto(int id) throws NoExisteProyectoException {
+    public ArrayList<Empleado> getAllEmpleadosFromProyecto(int id) throws NoExisteProyectoException {
         if (!proyectoRepository.findById(id).isPresent()){
             throw new NoExisteProyectoException();
         }
         Proyecto proyecto = proyectoRepository.findById(id).get();
-        return proyecto.getRecursos();
+        return proyecto.getEmpleados();
     }
 }
