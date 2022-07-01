@@ -2,7 +2,6 @@ package com.aninfo.proyectos.controller;
 
 import com.aninfo.proyectos.exception.NoExisteProyectoException;
 import com.aninfo.proyectos.model.Proyecto;
-import com.aninfo.proyectos.model.Empleado;
 import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.service.ProyectoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +10,13 @@ import java.util.ArrayList;
 
 @RestController
 public class ProyectoController {
+
+    // endpoint de PROYECTOS al cual se le envia un id de tarea, y este devuelve los detalles especificos de esta tarea
+    // endpoint de RECURSOS donde devuelve una lista de empleados, o un empleado especifico si se envia una id en el endpoint (2)
+/*
+    get url_server_proyectos/empleados/{id_empleado}/proyectos
+    endpoint de PROYECTOS al cual se le envia un id de empleado, y proyectos devuelve una lista con todos los proyectos asociados a esa ID de empleado
+*/
 
     @Autowired
     private final ProyectoService proyectoService = new ProyectoService();
@@ -38,19 +44,9 @@ public class ProyectoController {
         proyectoService.addTareaToProyecto(id, tarea);
     }
 
-    @RequestMapping(method=RequestMethod.POST, value="/proyectos/{id}/empleados")
-    public void addEmpleadoToProyecto(@PathVariable("id") int id, @RequestBody Empleado empleado) throws NoExisteProyectoException {
-        proyectoService.addEmpleadoToProyecto(id, empleado);
-    }
-
     @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/tareas/{id2}")
     public void deleteTareaFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_tarea) throws NoExisteProyectoException {
         proyectoService.deleteTareaFromProyecto(id_proyecto, id_tarea);
-    }
-
-    @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/empleados/{id2}")
-    public void deleteEmpleadoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_empleado) throws NoExisteProyectoException {
-        proyectoService.deleteEmpleadoFromProyecto(id_proyecto, id_empleado);
     }
 
     @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id}")
@@ -63,18 +59,13 @@ public class ProyectoController {
         proyectoService.updateTareaFromProyecto(id_proyecto, id_tarea, tarea);
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/empleados/{id2}")
-    public void updateEmpleadoFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_empleado, @RequestBody Empleado empleado) throws NoExisteProyectoException {
-        proyectoService.updateEmpleadoFromProyecto(id_proyecto, id_empleado, empleado);
-    }
-
     @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/tareas")
     public ArrayList<Tarea> getAllTareasFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
         return proyectoService.getAllTareasFromProyecto(id);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/empleados")
-    public ArrayList<Empleado> getAllEmpleadosFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
-        return proyectoService.getAllEmpleadosFromProyecto(id);
+    @RequestMapping(method=RequestMethod.DELETE, value="/proyectos")
+    public void deleteAllProyectos(){
+        proyectoService.deleteAllProyectos();
     }
 }

@@ -6,6 +6,7 @@ import com.aninfo.proyectos.repository.TareaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Service
 public class TareaService {
@@ -23,7 +24,8 @@ public class TareaService {
         if (tareaRepository.findById(id).isPresent()){
             return tareaRepository.findById(id).get();
         }
-        throw new NoExisteTareaException();
+        //throw new NoExisteTareaException();
+        return null;
     }
 
     public ArrayList<Tarea> getAllTareas() {
@@ -37,5 +39,10 @@ public class TareaService {
 
     public void deleteTarea(int id){
         tareaRepository.deleteById(id);
+    }
+
+    public ArrayList<Tarea> getAllTareasFromTicket(int id) {
+        ArrayList<Tarea> tareas = (ArrayList<Tarea>) tareaRepository.findAll();
+        return (ArrayList<Tarea>) tareas.stream().filter(tarea -> tarea.getIdTicket() == id).collect(Collectors.toList());
     }
 }

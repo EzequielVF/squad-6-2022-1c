@@ -2,9 +2,9 @@ package com.aninfo.proyectos.service;
 
 import com.aninfo.proyectos.exception.NoExisteProyectoException;
 import com.aninfo.proyectos.model.Proyecto;
-import com.aninfo.proyectos.model.Empleado;
 import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.repository.ProyectoRepository;
+import com.aninfo.proyectos.repository.TareaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -16,13 +16,15 @@ public class ProyectoService {
     private ProyectoRepository proyectoRepository;
 
     @Autowired
-    private final TareaService tareaService = new TareaService();
-
-    @Autowired
-    private final EmpleadoService empleadoService = new EmpleadoService();
+    private TareaRepository tareaRepository;
 
     public void addProyecto(Proyecto proyecto) {
         if (!proyectoRepository.findById(proyecto.getId()).isPresent()){
+            if (proyecto.getTareas().size() > 0){
+                for (Tarea tarea : proyecto.getTareas()){
+                    tareaRepository.save(tarea);
+                }
+            }
             proyectoRepository.save(proyecto);
         }
     }
@@ -54,18 +56,7 @@ public class ProyectoService {
         Proyecto proyecto = proyectoRepository.findById(id).get();
         proyecto.addTarea(tarea);
         tarea.setIdProyecto(id);
-        tareaService.addTarea(tarea);
-        proyectoRepository.save(proyecto);
-    }
-
-    public void addEmpleadoToProyecto(int id, Empleado empleado) throws NoExisteProyectoException {
-        if (!proyectoRepository.findById(id).isPresent()){
-            throw new NoExisteProyectoException();
-        }
-        Proyecto proyecto = proyectoRepository.findById(id).get();
-        proyecto.addEmpleado(empleado);
-        empleado.setIdProyecto(id);
-        empleadoService.addEmpleado(empleado);
+        tareaRepository.save(tarea);
         proyectoRepository.save(proyecto);
     }
 
@@ -75,17 +66,7 @@ public class ProyectoService {
         }
         Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
         proyecto.deleteTarea(id_tarea);
-        tareaService.deleteTarea(id_tarea);
-        proyectoRepository.save(proyecto);
-    }
-
-    public void deleteEmpleadoFromProyecto(int id_proyecto, int id_empleado) throws NoExisteProyectoException {
-        if (!proyectoRepository.findById(id_proyecto).isPresent()){
-            throw new NoExisteProyectoException();
-        }
-        Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
-        proyecto.deleteEmpleado(id_empleado);
-        empleadoService.deleteEmpleado(id_empleado);
+        tareaRepository.deleteById(id_tarea);
         proyectoRepository.save(proyecto);
     }
 
@@ -94,20 +75,9 @@ public class ProyectoService {
             throw new NoExisteProyectoException();
         }
         Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
-        tareaService.updateTarea(id_tarea, tarea);
+        tareaRepository.save(tarea);
         proyecto.deleteTarea(id_tarea);
         proyecto.addTarea(tarea);
-        proyectoRepository.save(proyecto);
-    }
-
-    public void updateEmpleadoFromProyecto(int id_proyecto, int id_empleado, Empleado empleado) throws NoExisteProyectoException {
-        if (!proyectoRepository.findById(id_proyecto).isPresent()){
-            throw new NoExisteProyectoException();
-        }
-        Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
-        empleadoService.updateEmpleado(id_empleado, empleado);
-        proyecto.deleteEmpleado(id_empleado);
-        proyecto.addEmpleado(empleado);
         proyectoRepository.save(proyecto);
     }
 
@@ -119,11 +89,7 @@ public class ProyectoService {
         return proyecto.getTareas();
     }
 
-    public ArrayList<Empleado> getAllEmpleadosFromProyecto(int id) throws NoExisteProyectoException {
-        if (!proyectoRepository.findById(id).isPresent()){
-            throw new NoExisteProyectoException();
-        }
-        Proyecto proyecto = proyectoRepository.findById(id).get();
-        return proyecto.getEmpleados();
+    public void deleteAllProyectos() {
+        proyectoRepository.deleteAll();
     }
 }

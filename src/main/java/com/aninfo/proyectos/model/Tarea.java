@@ -1,25 +1,35 @@
 package com.aninfo.proyectos.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 
 @Entity
 public class Tarea {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String description;
-    private String name;
-    private int id_proyecto;
+    private String nombre;
+    private String descripcion;
+    private String estado;
+    private int idTicket;
+    private int idProyecto;
+    //@ManyToOne
+    //@JoinColumn(name="idProyecto")
+    //private Proyecto proyecto;
 
     public Tarea(){
 
     }
 
-    public Tarea(int id, String name, String description, int id_proyecto) {
+    public Tarea(int id, String nombre, String descripcion, String estado, int idProyecto, int idTicket) {
         this.id = id;
-        this.name = name;
-        this.description = description;
-        this.id_proyecto = id_proyecto;
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.estado = estado;
+        this.idTicket = idTicket;
+        this.idProyecto = idProyecto;
     }
 
     public int getId(){
@@ -28,27 +38,39 @@ public class Tarea {
 
     public void setId(int id) { this.id = id; }
 
-    public void updateDescription(String description){
-        this.description = description;
+    public void setDescripcion(String descripcion){
+        this.descripcion = descripcion;
     }
 
-    public String getDescription(){
-        return this.description;
+    public String getDescripcion(){
+        return this.descripcion;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setNombre(String nombre){
+        this.nombre = nombre;
     }
 
-    public String getName(String name){
-        return this.name;
+    public String getNombre(){
+        return this.nombre;
     }
 
-    public void setIdProyecto(int id_proyecto){
-        this.id_proyecto = id_proyecto;
+    public void setEstado(String estado) { this.estado = estado; }
+
+    public String getEstado() { return this.estado; }
+
+    public void setIdProyecto(int id){
+        this.idProyecto = id;
     }
 
     public int getIdProyecto(){
-        return this.id_proyecto;
+        return this.idProyecto;
+    }
+
+    public void setIdTicket(int idTicket){
+        this.idTicket = idTicket;
+    }
+
+    public int getIdTicket() {
+        return this.idTicket;
     }
 }

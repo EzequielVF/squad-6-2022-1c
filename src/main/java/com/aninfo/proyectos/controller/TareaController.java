@@ -36,4 +36,9 @@ public class TareaController {
     public void updateTarea(@PathVariable("id") int id, @RequestBody Tarea tarea){
         tareaService.updateTarea(id, tarea);
     }
+
+    @RequestMapping(method=RequestMethod.GET, value="/tickets/{id}/tareas")
+    public ArrayList<Tarea> getTareasFromTicket(@PathVariable("id") int id){
+        return tareaService.getAllTareasFromTicket(id);
+    }
 }

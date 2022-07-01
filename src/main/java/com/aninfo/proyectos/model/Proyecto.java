@@ -6,53 +6,70 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 
 @Entity
 public class Proyecto {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
-    private String name;
-    private String description;
 
-    @OneToMany(cascade = {CascadeType.REMOVE})
+    private String nombre;
+    private String estado;
+    private Date fechaInicio;
+    private Date fechaFin;
+
+    // formato fecha en JSON para POST request:
+    // "fecha":"YYYY-MM-ddTHH:mm:ss"
+
+    @OneToMany(cascade = {CascadeType.REMOVE}/*, mappedBy = "proyecto"*/)
     private final List<Tarea> tareas = new ArrayList<>();
 
-    @OneToMany(cascade = {CascadeType.REMOVE})
-    private final List<Empleado> empleados = new ArrayList<>();
+
 
     public Proyecto(){
     }
 
-    public Proyecto(int id, String name, String description){
+    public Proyecto(int id, String nombre, String estado, Date fechaInicio, Date fechaFin){
         this.id = id;
-        this.name = name;
-        this.description = description;
+        this.nombre = nombre;
+        this.estado = estado;
+        this.fechaInicio = fechaInicio;
+        this.fechaFin = fechaFin;
     }
 
     public int getId() {
         return this.id;
     }
 
-    public String getName(){
-        return this.name;
+    public String getNombre(){
+        return this.nombre;
     }
 
-    public String getDescription(){
-        return this.description;
+    public String getEstado(){
+        return this.estado;
     }
+
+    public Date getFechaInicio() { return this.fechaInicio; }
+
+    public Date getFechaFin() { return this.fechaFin; }
 
     public void setId(int id){
         this.id = id;
     }
 
-    public void setName(String name){
-        this.name = name;
+    public void setNombre(String nombre){
+        this.nombre = nombre;
     }
 
-    public void setDescription(String description){
-        this.description = description;
+    public void setEstado(String estado){
+        this.estado = estado;
     }
+
+    public void setFechaInicio(Date fechaInicio) { this.fechaInicio = fechaInicio; }
+
+    public void setFechaFin(Date fechaFin) { this.fechaFin = fechaFin; }
 
     public void addTarea(Tarea tarea){
         tareas.add(tarea);
@@ -64,17 +81,5 @@ public class Proyecto {
 
     public ArrayList<Tarea> getTareas(){
         return new ArrayList<>(tareas);
-    }
-
-    public void addEmpleado(Empleado empleado){
-        empleados.add(empleado);
-    }
-
-    public void deleteEmpleado(int id){
-        empleados.removeIf(recurso -> recurso.getId() == id);
-    }
-
-    public ArrayList<Empleado> getEmpleados() {
-        return new ArrayList<>(empleados);
     }
 }

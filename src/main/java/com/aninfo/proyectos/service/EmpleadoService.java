@@ -1,42 +1,33 @@
 package com.aninfo.proyectos.service;
 
-import com.aninfo.proyectos.exception.NoExisteEmpleadoException;
-import com.aninfo.proyectos.model.Empleado;
-import com.aninfo.proyectos.repository.EmpleadoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class EmpleadoService {
 
-    @Autowired
-    private EmpleadoRepository empleadoRepository;
+    public Object getEmpleado(int id){
 
-    public void addEmpleado(Empleado empleado) {
-        if (!empleadoRepository.findById(empleado.getId()).isPresent()){
-            empleadoRepository.save(empleado);
+        Object[] empleados = makeRequestEmpleados();
+
+        if (empleados != null){
+            for (Object e : empleados){
+                if (e.toString().contains(String.valueOf(id))){
+                    return e;
+                }
+            }
         }
+
+        return new Object();
     }
 
-    public Empleado getEmpleado(int id) throws NoExisteEmpleadoException {
-        if (empleadoRepository.findById(id).isPresent()){
-            return empleadoRepository.findById(id).get();
-        }
-        throw new NoExisteEmpleadoException();
+    public Object[] getAllEmpleados() {
+        return makeRequestEmpleados();
     }
 
-    public ArrayList<Empleado> getAllEmpleados() {
-        return (ArrayList<Empleado>) empleadoRepository.findAll();
-    }
-
-    public void updateEmpleado(int id, Empleado empleado) {
-        empleadoRepository.deleteById(id);
-        empleadoRepository.save(empleado);
-    }
-
-    public void deleteEmpleado(int id){
-        empleadoRepository.deleteById(id);
+    private Object[] makeRequestEmpleados(){
+        String request = "https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos";
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(request, Object[].class);
     }
 }
