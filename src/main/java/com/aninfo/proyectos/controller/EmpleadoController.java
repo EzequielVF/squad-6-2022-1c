@@ -10,6 +10,7 @@ import com.aninfo.proyectos.service.EmpleadoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import java.util.ArrayList;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods= {RequestMethod.GET,RequestMethod.POST})
 @RestController
 public class EmpleadoController {
 
