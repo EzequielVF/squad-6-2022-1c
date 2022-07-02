@@ -24,8 +24,7 @@ public class TareaService {
         if (tareaRepository.findById(id).isPresent()){
             return tareaRepository.findById(id).get();
         }
-        //throw new NoExisteTareaException();
-        return null;
+        throw new NoExisteTareaException();
     }
 
     public ArrayList<Tarea> getAllTareas() {
@@ -44,5 +43,13 @@ public class TareaService {
     public ArrayList<Tarea> getAllTareasFromTicket(int id) {
         ArrayList<Tarea> tareas = (ArrayList<Tarea>) tareaRepository.findAll();
         return (ArrayList<Tarea>) tareas.stream().filter(tarea -> tarea.getIdTicket() == id).collect(Collectors.toList());
+    }
+
+    public void addEmpleadoToTarea(int id_tarea, long legajo) {
+        if (tareaRepository.findById(id_tarea).isPresent()){
+            Tarea tarea = tareaRepository.findById(id_tarea).get();
+            tarea.addEmpleado(legajo);
+            tareaRepository.save(tarea);
+        }
     }
 }

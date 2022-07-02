@@ -92,4 +92,12 @@ public class ProyectoService {
     public void deleteAllProyectos() {
         proyectoRepository.deleteAll();
     }
+
+    public void setLiderOfProyecto(int id_proyecto, long legajo) {
+        if (proyectoRepository.findById(id_proyecto).isPresent()){
+            Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
+            proyecto.setLegajoLider(legajo);
+            proyectoRepository.save(proyecto);
+        }
+    }
 }

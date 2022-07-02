@@ -6,7 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
 
 @Entity
 public class Proyecto {
@@ -17,26 +16,23 @@ public class Proyecto {
 
     private String nombre;
     private String estado;
-    private Date fechaInicio;
-    private Date fechaFin;
-
-    // formato fecha en JSON para POST request:
-    // "fecha":"YYYY-MM-ddTHH:mm:ss"
+    private String fechaInicio;
+    private String fechaFin;
+    private long legajoLider;
 
     @OneToMany(cascade = {CascadeType.REMOVE}/*, mappedBy = "proyecto"*/)
     private final List<Tarea> tareas = new ArrayList<>();
 
-
-
     public Proyecto(){
     }
 
-    public Proyecto(int id, String nombre, String estado, Date fechaInicio, Date fechaFin){
+    public Proyecto(int id, String nombre, String estado, String fechaInicio, String fechaFin, long legajoLider){
         this.id = id;
         this.nombre = nombre;
         this.estado = estado;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.legajoLider = legajoLider;
     }
 
     public int getId() {
@@ -51,9 +47,9 @@ public class Proyecto {
         return this.estado;
     }
 
-    public Date getFechaInicio() { return this.fechaInicio; }
+    public String getFechaInicio() { return this.fechaInicio; }
 
-    public Date getFechaFin() { return this.fechaFin; }
+    public String getFechaFin() { return this.fechaFin; }
 
     public void setId(int id){
         this.id = id;
@@ -67,9 +63,9 @@ public class Proyecto {
         this.estado = estado;
     }
 
-    public void setFechaInicio(Date fechaInicio) { this.fechaInicio = fechaInicio; }
+    public void setFechaInicio(String fechaInicio) { this.fechaInicio = fechaInicio; }
 
-    public void setFechaFin(Date fechaFin) { this.fechaFin = fechaFin; }
+    public void setFechaFin(String fechaFin) { this.fechaFin = fechaFin; }
 
     public void addTarea(Tarea tarea){
         tareas.add(tarea);
@@ -81,5 +77,13 @@ public class Proyecto {
 
     public ArrayList<Tarea> getTareas(){
         return new ArrayList<>(tareas);
+    }
+
+    public void setLegajoLider(long legajo){
+        this.legajoLider = legajo;
+    }
+
+    public long getLegajoLider(){
+        return this.legajoLider;
     }
 }

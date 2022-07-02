@@ -4,6 +4,7 @@ import com.google.common.base.Predicates;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.builders.PathSelectors;
@@ -30,11 +31,15 @@ public class ProyectosApplication {
 	public Docket apiDocket() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.any())
-				.paths(Predicates.not(PathSelectors.regex("/empleados.*")))
 				.paths(Predicates.not(PathSelectors.regex("/error")))
 				.paths(Predicates.not(PathSelectors.regex("/")))
 				.paths(PathSelectors.any())
 				.build();
 	}
+	/*
+	@Bean(name="entityManagerFactory")
+	public LocalSessionFactoryBean sessionFactory() {
+		return new LocalSessionFactoryBean();
+	}*/
 	//http://localhost:8080/swagger-ui.html#/
 }

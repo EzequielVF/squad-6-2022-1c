@@ -11,15 +11,12 @@ import java.util.ArrayList;
 @RestController
 public class ProyectoController {
 
-    // endpoint de PROYECTOS al cual se le envia un id de tarea, y este devuelve los detalles especificos de esta tarea
-    // endpoint de RECURSOS donde devuelve una lista de empleados, o un empleado especifico si se envia una id en el endpoint (2)
-/*
-    get url_server_proyectos/empleados/{id_empleado}/proyectos
-    endpoint de PROYECTOS al cual se le envia un id de empleado, y proyectos devuelve una lista con todos los proyectos asociados a esa ID de empleado
-*/
-
     @Autowired
     private final ProyectoService proyectoService = new ProyectoService();
+
+    /*
+    * GET REQUESTS /////////////////////////////////////////////////////////////////////////////////
+    * */
 
     @RequestMapping(method= RequestMethod.GET, value="/proyectos")
     public ArrayList<Proyecto> getAllProyectos(){
@@ -31,23 +28,45 @@ public class ProyectoController {
         return proyectoService.getProyecto(id);
     }
 
+    @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/tareas")
+    public ArrayList<Tarea> getAllTareasFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
+        return proyectoService.getAllTareasFromProyecto(id);
+    }
+
+    /*
+    * POST REQUESTS /////////////////////////////////////////////////////////////////////////////////
+    * */
+
     @RequestMapping(method=RequestMethod.POST, value="/proyectos")
     public void addProyecto(@RequestBody Proyecto proyecto){ proyectoService.addProyecto(proyecto); }
-
-    @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id}")
-    public void deleteProyecto(@PathVariable("id") int id){
-        proyectoService.deleteProyecto(id);
-    }
 
     @RequestMapping(method=RequestMethod.POST, value="/proyectos/{id}/tareas")
     public void addTareaToProyecto(@PathVariable("id") int id, @RequestBody Tarea tarea) throws NoExisteProyectoException {
         proyectoService.addTareaToProyecto(id, tarea);
     }
 
+    /*
+    * DELETE REQUESTS /////////////////////////////////////////////////////////////////////////////////
+    * */
+
+    @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id}")
+    public void deleteProyecto(@PathVariable("id") int id){
+        proyectoService.deleteProyecto(id);
+    }
+
     @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/tareas/{id2}")
     public void deleteTareaFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2") int id_tarea) throws NoExisteProyectoException {
         proyectoService.deleteTareaFromProyecto(id_proyecto, id_tarea);
     }
+
+    @RequestMapping(method=RequestMethod.DELETE, value="/proyectos")
+    public void deleteAllProyectos(){
+        proyectoService.deleteAllProyectos();
+    }
+
+    /*
+    * PUT REQUESTS /////////////////////////////////////////////////////////////////////////////////
+    * */
 
     @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id}")
     public void updateProyecto(@PathVariable("id")int id, @RequestBody Proyecto proyecto){
@@ -59,13 +78,8 @@ public class ProyectoController {
         proyectoService.updateTareaFromProyecto(id_proyecto, id_tarea, tarea);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/tareas")
-    public ArrayList<Tarea> getAllTareasFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
-        return proyectoService.getAllTareasFromProyecto(id);
-    }
-
-    @RequestMapping(method=RequestMethod.DELETE, value="/proyectos")
-    public void deleteAllProyectos(){
-        proyectoService.deleteAllProyectos();
+    @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/empleados/{id2}")
+    public void setLiderOfProyecto(@PathVariable("id1")int id_proyecto, @PathVariable("id2") long legajo){
+        proyectoService.setLiderOfProyecto(id_proyecto, legajo);
     }
 }
