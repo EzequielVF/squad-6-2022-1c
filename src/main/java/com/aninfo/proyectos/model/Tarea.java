@@ -92,7 +92,7 @@ public class Tarea {
         empleados.removeIf(legajo_empleado -> legajo_empleado == legajo);
     }
 
-    public List<Long> getEmpleados(){
-        return this.empleados;
+    public ArrayList<Long> getEmpleados(){
+        return new ArrayList<>(empleados);
     }
 }

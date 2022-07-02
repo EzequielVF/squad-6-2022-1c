@@ -1,6 +1,7 @@
 package com.aninfo.proyectos.controller;
 
 import com.aninfo.proyectos.exception.NoExisteProyectoException;
+import com.aninfo.proyectos.exception.NoExisteTareaException;
 import com.aninfo.proyectos.model.Proyecto;
 import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.service.ProyectoService;
@@ -81,5 +82,10 @@ public class ProyectoController {
     @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/empleados/{id2}")
     public void setLiderOfProyecto(@PathVariable("id1")int id_proyecto, @PathVariable("id2") long legajo){
         proyectoService.setLiderOfProyecto(id_proyecto, legajo);
+    }
+
+    @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/tarea_existente/{id2}")
+    public void addTareaExistenteToProyecto(@PathVariable("id1")int id_proyecto, @PathVariable("id2")int id_tarea) throws NoExisteTareaException {
+        proyectoService.addTareaExistenteToProyecto(id_proyecto, id_tarea);
     }
 }

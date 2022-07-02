@@ -75,8 +75,8 @@ public class Proyecto {
         tareas.removeIf(tarea -> tarea.getId() == id);
     }
 
-    public List<Tarea> getTareas(){
-        return tareas;
+    public ArrayList<Tarea> getTareas(){
+        return new ArrayList<>(tareas);
     }
 
     public void setLegajoLider(long legajo){

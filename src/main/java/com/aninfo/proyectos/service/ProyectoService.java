@@ -1,10 +1,10 @@
 package com.aninfo.proyectos.service;
 
 import com.aninfo.proyectos.exception.NoExisteProyectoException;
+import com.aninfo.proyectos.exception.NoExisteTareaException;
 import com.aninfo.proyectos.model.Proyecto;
 import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.repository.ProyectoRepository;
-import com.aninfo.proyectos.repository.TareaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
@@ -86,7 +86,7 @@ public class ProyectoService {
             throw new NoExisteProyectoException();
         }
         Proyecto proyecto = proyectoRepository.findById(id).get();
-        return (ArrayList<Tarea>) proyecto.getTareas();
+        return proyecto.getTareas();
     }
 
     public void deleteAllProyectos() {
@@ -99,5 +99,12 @@ public class ProyectoService {
             proyecto.setLegajoLider(legajo);
             proyectoRepository.save(proyecto);
         }
+    }
+
+    public void addTareaExistenteToProyecto(int id_proyecto, int id_tarea) throws NoExisteTareaException {
+        Tarea tarea = tareaService.getTarea(id_tarea);
+        Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
+        proyecto.addTarea(tarea);
+        proyectoRepository.save(proyecto);
     }
 }
