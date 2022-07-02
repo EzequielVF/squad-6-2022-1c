@@ -16,13 +16,13 @@ public class ProyectoService {
     private ProyectoRepository proyectoRepository;
 
     @Autowired
-    private TareaRepository tareaRepository;
+    private final TareaService tareaService = new TareaService();
 
     public void addProyecto(Proyecto proyecto) {
         if (!proyectoRepository.findById(proyecto.getId()).isPresent()){
             if (proyecto.getTareas().size() > 0){
                 for (Tarea tarea : proyecto.getTareas()){
-                    tareaRepository.save(tarea);
+                    tareaService.addTarea(tarea);
                 }
             }
             proyectoRepository.save(proyecto);
@@ -56,7 +56,7 @@ public class ProyectoService {
         Proyecto proyecto = proyectoRepository.findById(id).get();
         proyecto.addTarea(tarea);
         tarea.setIdProyecto(id);
-        tareaRepository.save(tarea);
+        tareaService.addTarea(tarea);
         proyectoRepository.save(proyecto);
     }
 
@@ -66,7 +66,7 @@ public class ProyectoService {
         }
         Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
         proyecto.deleteTarea(id_tarea);
-        tareaRepository.deleteById(id_tarea);
+        tareaService.deleteTarea(id_tarea);
         proyectoRepository.save(proyecto);
     }
 
@@ -75,7 +75,7 @@ public class ProyectoService {
             throw new NoExisteProyectoException();
         }
         Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
-        tareaRepository.save(tarea);
+        tareaService.addTarea(tarea);
         proyecto.deleteTarea(id_tarea);
         proyecto.addTarea(tarea);
         proyectoRepository.save(proyecto);
@@ -86,7 +86,7 @@ public class ProyectoService {
             throw new NoExisteProyectoException();
         }
         Proyecto proyecto = proyectoRepository.findById(id).get();
-        return proyecto.getTareas();
+        return (ArrayList<Tarea>) proyecto.getTareas();
     }
 
     public void deleteAllProyectos() {

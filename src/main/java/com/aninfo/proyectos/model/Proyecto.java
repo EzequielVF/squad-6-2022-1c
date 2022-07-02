@@ -20,7 +20,7 @@ public class Proyecto {
     private String fechaFin;
     private long legajoLider;
 
-    @OneToMany(cascade = {CascadeType.REMOVE}/*, mappedBy = "proyecto"*/)
+    @OneToMany(cascade = {CascadeType.REMOVE})
     private final List<Tarea> tareas = new ArrayList<>();
 
     public Proyecto(){
@@ -75,8 +75,8 @@ public class Proyecto {
         tareas.removeIf(tarea -> tarea.getId() == id);
     }
 
-    public ArrayList<Tarea> getTareas(){
-        return new ArrayList<>(tareas);
+    public List<Tarea> getTareas(){
+        return tareas;
     }
 
     public void setLegajoLider(long legajo){

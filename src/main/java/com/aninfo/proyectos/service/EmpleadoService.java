@@ -50,7 +50,7 @@ public class EmpleadoService {
         ArrayList<Proyecto> proyectosDelEmpleado = new ArrayList<>();
 
         for (Proyecto proyecto : proyectos){
-            ArrayList<Tarea> tareas = proyecto.getTareas();
+            ArrayList<Tarea> tareas = (ArrayList<Tarea>) proyecto.getTareas();
             for (Tarea tarea : tareas){
                 if (tarea.getEmpleados().contains(legajo)){
                     proyectosDelEmpleado.add(proyecto);
