@@ -33,7 +33,14 @@ public class TareaService {
 
     public void updateTarea(int id, Tarea tarea) {
         if (tareaRepository.findById(id).isPresent()){
-            tareaRepository.save(tarea);
+            Tarea t = tareaRepository.getReferenceById(id);
+            t.setNombre(tarea.getNombre());
+            t.setEstado(tarea.getEstado());
+            t.setDescripcion(tarea.getDescripcion());
+            t.setIdTicket(tarea.getIdTicket());
+            t.setIdProyecto(tarea.getIdProyecto());
+            t.setFechaCreacion(tarea.getFechaCreacion());
+            tareaRepository.save(t);
         }
     }
 
@@ -52,5 +59,17 @@ public class TareaService {
             tarea.addEmpleado(legajo);
             tareaRepository.save(tarea);
         }
+    }
+
+    public void deleteEmpleadoFromTarea(int id_tarea, long legajo){
+        if (tareaRepository.findById(id_tarea).isPresent()){
+            Tarea t = tareaRepository.getReferenceById(id_tarea);
+            t.deleteEmpleado(legajo);
+            tareaRepository.save(t);
+        }
+    }
+
+    public void deleteAllTareas() {
+        tareaRepository.deleteAll();
     }
 }

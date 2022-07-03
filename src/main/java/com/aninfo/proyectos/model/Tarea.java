@@ -13,6 +13,7 @@ public class Tarea {
     private String nombre;
     private String descripcion;
     private String estado;
+    private String fechaCreacion;
 
     private int idTicket;
     private int idProyecto;
@@ -24,11 +25,12 @@ public class Tarea {
 
     }
 
-    public Tarea(int id, String nombre, String descripcion, String estado, int idProyecto, int idTicket) {
+    public Tarea(int id, String nombre, String descripcion, String estado, String fechaCreacion, int idProyecto, int idTicket) {
         this.id = id;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.estado = estado;
+        this.fechaCreacion = fechaCreacion;
         this.idTicket = idTicket;
         this.idProyecto = idProyecto;
     }
@@ -86,4 +88,13 @@ public class Tarea {
     public ArrayList<Long> getEmpleados(){
         return new ArrayList<>(empleados);
     }
+
+    public void setFechaCreacion(String fechaCreacion){
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public String getFechaCreacion(){
+        return this.fechaCreacion;
+    }
 }
+

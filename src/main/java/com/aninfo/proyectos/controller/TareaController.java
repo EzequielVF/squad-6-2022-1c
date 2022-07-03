@@ -5,7 +5,6 @@ import com.aninfo.proyectos.model.Tarea;
 import com.aninfo.proyectos.service.TareaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
@@ -48,6 +47,16 @@ public class TareaController {
     @RequestMapping(method=RequestMethod.DELETE, value="/tareas/{id}")
     public void deleteTarea(@PathVariable("id") int id){
         tareaService.deleteTarea(id);
+    }
+
+    @RequestMapping(method=RequestMethod.DELETE, value="/tareas")
+    public void deleteAllTareas(){
+        tareaService.deleteAllTareas();
+    }
+
+    @RequestMapping(method=RequestMethod.DELETE, value="/tareas/{id1}/empleados/{id2}")
+    public void deleteEmpleadoFromTarea(@PathVariable("id1")int id_tarea, @PathVariable("id2") long legajo){
+        tareaService.deleteEmpleadoFromTarea(id_tarea, legajo);
     }
 
     /*

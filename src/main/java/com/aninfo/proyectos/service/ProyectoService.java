@@ -22,6 +22,7 @@ public class ProyectoService {
         if (!proyectoRepository.findById(proyecto.getId()).isPresent()){
             if (proyecto.getTareas().size() > 0){
                 for (Tarea tarea : proyecto.getTareas()){
+                    tarea.setIdProyecto(proyecto.getId());
                     tareaService.addTarea(tarea);
                 }
             }
@@ -42,7 +43,14 @@ public class ProyectoService {
 
     public void updateProyecto(int id, Proyecto proyecto) throws NoExisteProyectoException {
         if (proyectoRepository.findById(id).isPresent()){
-            proyectoRepository.save(proyecto);
+            Proyecto p = proyectoRepository.getReferenceById(id);
+            p.setNombre(proyecto.getNombre());
+            p.setEstado(proyecto.getEstado());
+            p.setDescripcion(proyecto.getDescripcion());
+            p.setFechaInicio(proyecto.getFechaInicio());
+            p.setFechaFin(proyecto.getFechaFin());
+            p.setLegajoLider(proyecto.getLegajoLider());
+            proyectoRepository.save(p);
         }
     }
 
@@ -143,24 +151,3 @@ public class ProyectoService {
         return estaEnProyecto;
     }
 }
-
-/*
-json para put de proyecto
-{
-    "descripcion":"string",
-    "estado":"string",
-    "fechaFin":"string",
-    "fechaInicio":"string",
-    "nombre":"string",
-    "legajoLider":int
-}
-
-json para put de tarea
-{
-  "descripcion": "string",
-  "estado": "string",
-  "idProyecto": int,
-  "idTicket": int,
-  "nombre": "string"
-}
-*/
