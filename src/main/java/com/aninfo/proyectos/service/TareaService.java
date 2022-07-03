@@ -72,4 +72,12 @@ public class TareaService {
     public void deleteAllTareas() {
         tareaRepository.deleteAll();
     }
+
+    public void addTicketToTarea(int id_tarea, int id_ticket) {
+        if (tareaRepository.findById(id_tarea).isPresent()){
+            Tarea t = tareaRepository.getReferenceById(id_tarea);
+            t.setIdTicket(id_ticket);
+            tareaRepository.save(t);
+        }
+    }
 }

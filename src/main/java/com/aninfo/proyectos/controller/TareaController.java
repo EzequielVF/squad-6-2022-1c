@@ -40,6 +40,11 @@ public class TareaController {
     @RequestMapping(method=RequestMethod.POST, value="/tareas")
     public void addTarea(@RequestBody Tarea tarea){ tareaService.addTarea(tarea); }
 
+    @RequestMapping(method=RequestMethod.POST, value="/tareas/{id1}/tickets/{id2}")
+    public void addTicketToTarea(@PathVariable("id1")int id_tarea, @PathVariable("id2")int id_ticket){
+        tareaService.addTicketToTarea(id_tarea, id_ticket);
+    }
+
     /*
      * DELETE REQUESTS /////////////////////////////////////////////////////////////////////////////////
      * */
