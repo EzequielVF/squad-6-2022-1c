@@ -18,6 +18,7 @@ public class Proyecto {
     private String estado;
     private String fechaInicio;
     private String fechaFin;
+    private String descripcion;
     private long legajoLider;
 
     @OneToMany(cascade = {CascadeType.REMOVE})
@@ -26,12 +27,13 @@ public class Proyecto {
     public Proyecto(){
     }
 
-    public Proyecto(int id, String nombre, String estado, String fechaInicio, String fechaFin, long legajoLider){
+    public Proyecto(int id, String nombre, String estado, String fechaInicio, String fechaFin, String descripcion, long legajoLider){
         this.id = id;
         this.nombre = nombre;
         this.estado = estado;
         this.fechaInicio = fechaInicio;
         this.fechaFin = fechaFin;
+        this.descripcion = descripcion;
         this.legajoLider = legajoLider;
     }
 
@@ -85,5 +87,13 @@ public class Proyecto {
 
     public long getLegajoLider(){
         return this.legajoLider;
+    }
+
+    public void setDescripcion(String descripcion){
+        this.descripcion = descripcion;
+    }
+
+    public String getDescripcion(){
+        return this.descripcion;
     }
 }

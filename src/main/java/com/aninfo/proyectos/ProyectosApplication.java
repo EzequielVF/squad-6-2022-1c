@@ -5,10 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.builders.PathSelectors;
@@ -42,10 +39,5 @@ public class ProyectosApplication {
 				.paths(PathSelectors.any())
 				.build();
 	}
-	/*
-	@Bean(name="entityManagerFactory")
-	public LocalSessionFactoryBean sessionFactory() {
-		return new LocalSessionFactoryBean();
-	}*/
 	//http://localhost:8080/swagger-ui.html#/
 }

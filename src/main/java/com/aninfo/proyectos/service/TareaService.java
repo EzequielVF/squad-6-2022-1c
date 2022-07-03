@@ -32,8 +32,9 @@ public class TareaService {
     }
 
     public void updateTarea(int id, Tarea tarea) {
-        tareaRepository.deleteById(id);
-        tareaRepository.save(tarea);
+        if (tareaRepository.findById(id).isPresent()){
+            tareaRepository.save(tarea);
+        }
     }
 
     public void deleteTarea(int id){

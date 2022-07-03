@@ -40,9 +40,10 @@ public class ProyectoService {
         return (ArrayList<Proyecto>) proyectoRepository.findAll();
     }
 
-    public void updateProyecto(int id, Proyecto proyecto) {
-        proyectoRepository.deleteById(id);
-        proyectoRepository.save(proyecto);
+    public void updateProyecto(int id, Proyecto proyecto) throws NoExisteProyectoException {
+        if (proyectoRepository.findById(id).isPresent()){
+            proyectoRepository.save(proyecto);
+        }
     }
 
     public void deleteProyecto(int id){
@@ -107,4 +108,59 @@ public class ProyectoService {
         proyecto.addTarea(tarea);
         proyectoRepository.save(proyecto);
     }
+
+    public boolean empleadoEstaEnTarea(int id_proyecto, int id_tarea, long legajo) {
+        if (!proyectoRepository.findById(id_proyecto).isPresent()){
+            return false;
+        }
+        Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
+        ArrayList<Tarea> tareas = proyecto.getTareas();
+        if (!tareaEnProyecto(tareas, id_tarea)) {
+            return false;
+        }
+        return empleadoEnProyecto(tareas, legajo);
+    }
+
+    private boolean tareaEnProyecto(ArrayList<Tarea> tareas, int id){
+        boolean estaEnProyecto = false;
+        for (Tarea tarea : tareas){
+            if (tarea.getId() == id){
+                estaEnProyecto = true;
+                break;
+            }
+        }
+        return estaEnProyecto;
+    }
+
+    private boolean empleadoEnProyecto(ArrayList<Tarea> tareas, long legajo){
+        boolean estaEnProyecto = false;
+        for (Tarea tarea : tareas){
+            if (tarea.getEmpleados().contains(legajo)){
+                estaEnProyecto = true;
+                break;
+            }
+        }
+        return estaEnProyecto;
+    }
 }
+
+/*
+json para put de proyecto
+{
+    "descripcion":"string",
+    "estado":"string",
+    "fechaFin":"string",
+    "fechaInicio":"string",
+    "nombre":"string",
+    "legajoLider":int
+}
+
+json para put de tarea
+{
+  "descripcion": "string",
+  "estado": "string",
+  "idProyecto": int,
+  "idTicket": int,
+  "nombre": "string"
+}
+*/

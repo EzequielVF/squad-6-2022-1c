@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
-@CrossOrigin(origins = "*", allowedHeaders = "*", methods= {RequestMethod.GET,RequestMethod.POST})
+@CrossOrigin(origins = "*", allowedHeaders = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 @RestController
 public class ProyectoController {
 
@@ -33,6 +33,11 @@ public class ProyectoController {
     @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/tareas")
     public ArrayList<Tarea> getAllTareasFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
         return proyectoService.getAllTareasFromProyecto(id);
+    }
+
+    @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id1}/tareas/{id2}/empleados/{id3}")
+    public boolean empleadoEstaEnTarea(@PathVariable("id1")int id_proyecto, @PathVariable("id2")int id_tarea, @PathVariable("id3")long legajo){
+        return proyectoService.empleadoEstaEnTarea(id_proyecto, id_tarea, legajo);
     }
 
     /*
@@ -71,7 +76,7 @@ public class ProyectoController {
     * */
 
     @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id}")
-    public void updateProyecto(@PathVariable("id")int id, @RequestBody Proyecto proyecto){
+    public void updateProyecto(@PathVariable("id")int id, @RequestBody Proyecto proyecto) throws NoExisteProyectoException {
         proyectoService.updateProyecto(id, proyecto);
     }
 
