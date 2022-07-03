@@ -1,13 +1,13 @@
 package com.aninfo.proyectos.service;
 
-import com.aninfo.proyectos.exception.NoExisteProyectoException;
-import com.aninfo.proyectos.exception.NoExisteTareaException;
-import com.aninfo.proyectos.model.Proyecto;
-import com.aninfo.proyectos.model.Tarea;
-import com.aninfo.proyectos.repository.ProyectoRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import com.aninfo.proyectos.model.Tarea;
+import com.aninfo.proyectos.model.Proyecto;
+import org.springframework.stereotype.Service;
+import com.aninfo.proyectos.repository.ProyectoRepository;
+import com.aninfo.proyectos.exception.NoExisteTareaException;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.aninfo.proyectos.exception.NoExisteProyectoException;
 
 @Service
 public class ProyectoService {

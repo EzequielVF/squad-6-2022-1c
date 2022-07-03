@@ -1,11 +1,11 @@
 package com.aninfo.proyectos.model;
 
+import java.util.List;
+import java.util.ArrayList;
 import javax.persistence.*;
 import javax.persistence.Id;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
-import java.util.List;
-import java.util.ArrayList;
 
 @Entity
 public class Proyecto {

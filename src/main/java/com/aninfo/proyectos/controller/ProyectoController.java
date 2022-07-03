@@ -1,13 +1,13 @@
 package com.aninfo.proyectos.controller;
 
-import com.aninfo.proyectos.exception.NoExisteProyectoException;
-import com.aninfo.proyectos.exception.NoExisteTareaException;
-import com.aninfo.proyectos.model.Proyecto;
-import com.aninfo.proyectos.model.Tarea;
-import com.aninfo.proyectos.service.ProyectoService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
+import com.aninfo.proyectos.model.Tarea;
+import com.aninfo.proyectos.model.Proyecto;
+import org.springframework.web.bind.annotation.*;
+import com.aninfo.proyectos.service.ProyectoService;
+import com.aninfo.proyectos.exception.NoExisteTareaException;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.aninfo.proyectos.exception.NoExisteProyectoException;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*", methods= {RequestMethod.GET,RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PUT})
 @RestController
@@ -35,7 +35,7 @@ public class ProyectoController {
         return proyectoService.getAllTareasFromProyecto(id);
     }
 
-    @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id1}/tareas/{id2}/empleados/{id3}")
+    @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id1}/tareas/{id2}/empleados/{id3}/exist")
     public boolean empleadoEstaEnTarea(@PathVariable("id1")int id_proyecto, @PathVariable("id2")int id_tarea, @PathVariable("id3")long legajo){
         return proyectoService.empleadoEstaEnTarea(id_proyecto, id_tarea, legajo);
     }

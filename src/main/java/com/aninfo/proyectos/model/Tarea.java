@@ -1,8 +1,8 @@
 package com.aninfo.proyectos.model;
 
+import java.util.List;
 import javax.persistence.*;
 import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 public class Tarea {
