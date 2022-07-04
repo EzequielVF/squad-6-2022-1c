@@ -26,6 +26,7 @@ public class TareaTest {
     private final Tarea tareaEsperada = new Tarea();
     private final ArrayList<Tarea> tareasEsperadas = new ArrayList<Tarea>();
     private Proyecto proyecto = new Proyecto();
+    private Proyecto proyecto2 = new Proyecto();
     private Tarea tarea1 = new Tarea();
     private Tarea tarea2 = new Tarea();
     private ResponseEntity<Tarea> latestResponse;
@@ -60,20 +61,20 @@ public class TareaTest {
 
     @Given("^un proyecto")
     public void givenUnProyecto() {
-        testRestTemplate.postForEntity("http://localhost:8080/proyectos", proyecto, Proyecto.class);
+        proyectoRepository.save(proyecto);
     }
 
     @When("^el empleado agrega la tarea al proyecto")
     public void whenElEmpleadoAgregaLaTareaAlProyecto() {
         int idProyecto = proyecto.getId();
-        latestResponse = testRestTemplate.postForEntity("http://localhost:8080/proyectos/" + idProyecto + "/tareas", tarea1, Tarea.class);
+        latestResponse = testRestTemplate.postForEntity("https://moduloproyectos.herokuapp.com/proyectos/" + idProyecto + "/tareas", tarea1, Tarea.class);
     }
 
     @Then("^la tarea se agrega al proyecto")
     public void thenLaTareaSeAgregaAlProyecto() throws ParseException {
         int id = proyecto.getId();
         ArrayList<Tarea> tareasActuales = proyectoRepository.getReferenceById(id).getTareas();
-        Assertions.assertEquals(proyecto.getId(), tareasActuales.get(0).getIdProyecto());
+        Assertions.assertEquals(id, tareasActuales.get(0).getIdProyecto());
     }
 
     @And("^se recibe un status code de (\\d+)")
@@ -99,7 +100,7 @@ public class TareaTest {
     @When("^el empleado pide las tareas del proyecto")
     public void whenElEmpleadoPideLasTareasDelProyecto() {
         int idProyecto = proyecto.getId();
-        latestResponseArray = testRestTemplate.getForEntity("http://localhost:8080/proyectos/{id}/tareas", Tarea[].class, idProyecto);
+        latestResponseArray = testRestTemplate.getForEntity("https://moduloproyectos.herokuapp.com/proyectos/{id}/tareas", Tarea[].class, idProyecto);
         Tarea[] tareas = latestResponseArray.getBody();
         Collections.addAll(tareasEsperadas, tareas);
     }
@@ -117,7 +118,7 @@ public class TareaTest {
         int idTarea = tarea1.getId();
 
         latestResponse = testRestTemplate.exchange(
-                "http://localhost:8080/proyectos/" + String.valueOf(idProyecto) + "/tareas/" + String.valueOf(idTarea),
+                "https://moduloproyectos.herokuapp.com/proyectos/" + String.valueOf(idProyecto) + "/tareas/" + String.valueOf(idTarea),
                 HttpMethod.DELETE,
                 new HttpEntity<Tarea>(new HttpHeaders()),
                 Tarea.class
@@ -127,6 +128,30 @@ public class TareaTest {
     @Then("^la tarea se borra del proyecto")
     public void ThenLaTareaSeBorraDelProyecto() {
         Assert.assertEquals(1, (proyectoRepository.getReferenceById(proyecto.getId())).getTareas().size());
+    }
+
+    @Given("^varios proyectos con tareas")
+    public void givenVariosProyectosConTareas() {
+        tareaRepository.save(tarea1);
+        tareaRepository.save(tarea2);
+        proyecto.addTarea(tarea1);
+        proyecto2.addTarea(tarea2);
+        proyectoRepository.save(proyecto);
+        proyectoRepository.save(proyecto2);
+    }
+
+    @When("^el empleado pide todas las tareas")
+    public void whenElEmpleadoPideTodasLasTareas() {
+        latestResponseArray = testRestTemplate.getForEntity("https://moduloproyectos.herokuapp.com/tareas", Tarea[].class);
+        Tarea[] tareas = latestResponseArray.getBody();
+        Collections.addAll(tareasEsperadas, tareas);
+    }
+
+    @Then("^se devuelven todas las tareas")
+    public void thenSeDevuelvenTodasLasTareas() {
+        ArrayList<Tarea> tareasActuales = (ArrayList<Tarea>) tareaRepository.findAll();
+        Assertions.assertEquals(tareasEsperadas.size(), tareasActuales.size());
+        Assertions.assertTrue(assertArray(tareasEsperadas, tareasActuales));
     }
 
     private boolean assertArray(ArrayList<Tarea> t1, ArrayList<Tarea> t2){

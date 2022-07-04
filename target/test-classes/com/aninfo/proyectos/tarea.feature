@@ -16,3 +16,15 @@ Feature: Request de tareas
     When el empleado borra una tarea del proyecto
     Then la tarea se borra del proyecto
     #And el empleado recibe un status code de 200
+
+  Scenario: Empleado hace GET a /tareas
+    Given varios proyectos con tareas
+    When el empleado pide todas las tareas
+    Then se devuelven todas las tareas
+    And se recibe un status code de 200
+    
+  #Scenario: Empleado hace DELETE a /tareas
+   # Given varios proyectos con tareas
+    #When el empleado borra todas las tareas
+    #Then se borran todas las tareas
+    #And se recibe un status code de 200

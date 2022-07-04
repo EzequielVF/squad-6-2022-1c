@@ -57,7 +57,7 @@ public class ProyectoTest {
 
     @When("^el empleado agrega un proyecto")
     public void whenElEmpleadoAgregaUnProyecto(){
-        latestResponse = testRestTemplate.postForEntity("http://localhost:8080/proyectos", proyectoEsperado, Proyecto.class);
+        latestResponse = testRestTemplate.postForEntity("https://moduloproyectos.herokuapp.com/proyectos", proyectoEsperado, Proyecto.class);
     }
 
     @And("^el empleado recibe un status code de (\\d+)")
@@ -86,7 +86,7 @@ public class ProyectoTest {
 
     @When("^el empleado pide todos los proyectos")
     public void whenElEmpleadoPideTodosLosProyectos() {
-        latestResponseArray = testRestTemplate.getForEntity("http://localhost:8080/proyectos", Proyecto[].class);
+        latestResponseArray = testRestTemplate.getForEntity("https://moduloproyectos.herokuapp.com/proyectos", Proyecto[].class);
         Proyecto[] ps = latestResponseArray.getBody();
         Collections.addAll(proyectosEsperados, ps);
     }
@@ -101,7 +101,7 @@ public class ProyectoTest {
     public void whenElEmpleadoBorraUnProyectoSinTareas() {
         int id = proyectoDb.getId();
         latestResponse  = testRestTemplate.exchange(
-                "http://localhost:8080/proyectos/{id}",
+                "https://moduloproyectos.herokuapp.com/proyectos/{id}",
                 HttpMethod.DELETE,
                 new HttpEntity<Proyecto>(new HttpHeaders()),
                 Proyecto.class,
@@ -118,7 +118,7 @@ public class ProyectoTest {
     public void whenElEmpleadoBorraUnProyectoQueNoExiste() {
         proyectosEsperados = (ArrayList<Proyecto>) proyectoRepository.findAll();
         latestResponse  = testRestTemplate.exchange(
-                "http://localhost:8080/proyectos/{id}",
+                "https://moduloproyectos.herokuapp.com/proyectos/{id}",
                 HttpMethod.DELETE,
                 new HttpEntity<Proyecto>(new HttpHeaders()),
                 Proyecto.class,
