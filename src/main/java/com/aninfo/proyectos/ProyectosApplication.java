@@ -30,7 +30,6 @@ public class ProyectosApplication {
 	}
 
 	@Bean
-	//http://localhost:8080/swagger-ui.html#/
 	public Docket apiDocket() {
 		return new Docket(DocumentationType.SWAGGER_2).select()
 				.apis(RequestHandlerSelectors.any())
