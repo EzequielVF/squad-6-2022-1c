@@ -25,11 +25,6 @@ public class EmpleadoService {
     RestTemplate restTemplate = new RestTemplate();
     JSONParser parser = new JSONParser();
 
-    private JSONArray requestAuxiliarEmpleados() throws ParseException {
-        String request = "https://anypoint.mulesoft.com/mocking/api/v1/sources/exchange/assets/754f50e8-20d8-4223-bbdc-56d50131d0ae/recursos-psa/1.0.0/m/api/recursos";
-        return (JSONArray) parser.parse(restTemplate.getForObject(request, String.class));
-    }
-
     private JSONArray makeRequestEmpleados() throws ParseException {
         String request = "https://squad5-recursos.herokuapp.com/api/empleados";
         return (JSONArray) parser.parse(restTemplate.getForObject(request, String.class));
@@ -41,22 +36,11 @@ public class EmpleadoService {
     }
 
     public JSONObject getEmpleado(long legajo) throws ParseException {
-        JSONArray empleadosJson = requestAuxiliarEmpleados();
-        JSONObject empleado = new JSONObject();
-        for (Object empleadoJson : empleadosJson){
-            long legajoEmpleado = (long)((JSONObject)empleadoJson).get("legajo");
-            if (legajoEmpleado == legajo){
-                empleado = (JSONObject)empleadoJson;
-                break;
-            }
-        }
-        return empleado;
-        //return makeRequestEmpleado(legajo);
+        return makeRequestEmpleado(legajo);
     }
 
     public JSONArray getAllEmpleados() throws ParseException {
-        return requestAuxiliarEmpleados();
-        //return makeRequestEmpleados();
+        return makeRequestEmpleados();
     }
 
     public ArrayList<Proyecto> getProyectosFromEmpleado(long legajo) {
