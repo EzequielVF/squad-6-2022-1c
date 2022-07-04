@@ -1,31 +1,32 @@
 package com.aninfo.proyectos;
 
-import com.aninfo.proyectos.model.Proyecto;
-import com.aninfo.proyectos.repository.ProyectoRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import io.cucumber.java.Before;
-import io.cucumber.java.en.Given;
-import io.cucumber.java.en.And;
-import io.cucumber.java.en.Then;
-import io.cucumber.java.en.When;
-import io.cucumber.spring.CucumberContextConfiguration;
+import java.util.*;
+
 import org.junit.Assert;
-import org.junit.jupiter.api.Assertions;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.And;
+import io.cucumber.java.en.When;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.Given;
 import org.springframework.http.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import org.springframework.dao.EmptyResultDataAccessException;
+import javax.transaction.Transactional;
+import org.junit.jupiter.api.Assertions;
+import com.aninfo.proyectos.model.Proyecto;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.cucumber.spring.CucumberContextConfiguration;
+import com.aninfo.proyectos.repository.ProyectoRepository;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.web.client.TestRestTemplate;
 
 @CucumberContextConfiguration
 @SpringBootTest
+@Transactional
 public class ProyectoTest {
 
     private final TestRestTemplate testRestTemplate = new TestRestTemplate();
     private final Proyecto proyectoEsperado = new Proyecto();
-    private final ArrayList <Proyecto> proyectosEsperados = new ArrayList<Proyecto>();
+    private ArrayList <Proyecto> proyectosEsperados = new ArrayList<Proyecto>();
     private Proyecto proyectoDb = new Proyecto();
     private ResponseEntity<Proyecto> latestResponse;
     private ResponseEntity<Proyecto[]> latestResponseArray;
@@ -48,7 +49,6 @@ public class ProyectoTest {
         proyectoDb.setFechaInicio("01/07/2021");
         proyectoDb.setFechaFin("01/7/2022");
         proyectoDb.setDescripcion("descripcion del proyecto 2");
-        proyectoRepository.save(proyectoDb);
     }
 
     @Given("^soy un empleado")
@@ -60,8 +60,8 @@ public class ProyectoTest {
         latestResponse = testRestTemplate.postForEntity("http://localhost:8080/proyectos", proyectoEsperado, Proyecto.class);
     }
 
-    @Then("^el empleado recibe un status code de (\\d+)")
-    public void thenElEmpleadoRecibeUnStatusCodeDe(int statusCode) {
+    @And("^el empleado recibe un status code de (\\d+)")
+    public void andElEmpleadoRecibeUnStatusCodeDe(int statusCode) {
 
         HttpStatus currentStatusCode = null;
         if (latestResponse != null) {
@@ -72,10 +72,16 @@ public class ProyectoTest {
         Assertions.assertEquals(statusCode, currentStatusCode.value());
     }
 
-    @And("^el proyecto se agrega")
-    public void andElProyectoSeAgrega() {
+    @Then("^el proyecto se agrega")
+    public void thenElProyectoSeAgrega() {
         Proyecto proyectoActual = proyectoRepository.getReferenceById(proyectoEsperado.getId());
         Assertions.assertEquals(proyectoEsperado.getId(), proyectoActual.getId());
+    }
+
+    @Given("^hay proyectos cargados")
+    public void givenHayProyectosCargados() {
+        proyectoRepository.save(proyectoEsperado);
+        proyectoRepository.save(proyectoDb);
     }
 
     @When("^el empleado pide todos los proyectos")
@@ -85,54 +91,45 @@ public class ProyectoTest {
         Collections.addAll(proyectosEsperados, ps);
     }
 
-    @And("^se devuelven todos los proyectos")
-    public void andSeDevuelvenTodosLosProyectos() {
+    @Then("^se devuelven todos los proyectos")
+    public void thenSeDevuelvenTodosLosProyectos() {
         ArrayList<Proyecto> proyectosActuales = (ArrayList<Proyecto>) proyectoRepository.findAll();
-        Assertions.assertTrue(assertArray(proyectosActuales, proyectosEsperados));
+        Assertions.assertTrue(assertArray(proyectosEsperados, proyectosActuales));
     }
 
     @When("^el empleado borra un proyecto sin tareas")
     public void whenElEmpleadoBorraUnProyectoSinTareas() {
         int id = proyectoDb.getId();
-        latestResponse  = testRestTemplate.exchange("http://localhost:8080/proyectos/{id}", HttpMethod.DELETE, new HttpEntity<Proyecto>(new HttpHeaders()), Proyecto.class, id);
+        latestResponse  = testRestTemplate.exchange(
+                "http://localhost:8080/proyectos/{id}",
+                HttpMethod.DELETE,
+                new HttpEntity<Proyecto>(new HttpHeaders()),
+                Proyecto.class,
+                id
+        );
     }
 
-    @And("^el proyecto se borra")
-    public void andElProyectoSeBorra() {
+    @Then("^el proyecto se borra")
+    public void thenElProyectoSeBorra() {
         Assert.assertFalse((proyectoRepository.findById(proyectoDb.getId()).isPresent()));
-    }
-
-    /*@When("^el empleado cambia el nombre de un proyecto a (.*)")
-    public void whenElEmpleadoCambiaElNombreDeUnProyectoA(String nombre) {
-        int id = proyectoDb.getId();
-
-        Map<String, String> map = new HashMap<>();
-        map.put("nombre", proyectoDb.getNombre());
-        map.put("estado", proyectoDb.getEstado());
-        map.put("fechaInicio", proyectoDb.getFechaInicio());
-        map.put("fechFin", proyectoDb.getFechaFin());
-
-        JSONObject p = new JSONObject(map);
-
-        latestResponse = testRestTemplate.exchange();
-    }*/
-
-    @When("^el empleado cambia el nombre de un proyecto a (.*)")
-    public void whenElEmpleadoCambiaElNombreDeUnProyectoA(String nombre){
-        int id = proyectoDb.getId();
-        proyectoDb.setNombre(nombre);
-        latestResponse  = testRestTemplate.exchange("http://localhost:8080/proyectos/{id}", HttpMethod.PUT, new HttpEntity<Proyecto>(new HttpHeaders()), Proyecto.class, id);
-    }
-
-    @And("^el nombre del proyecto cambia")
-    public void andElNombreDelProyectoCambia() {
-        Proyecto proyectoActual = latestResponse.getBody();
-        Assert.assertEquals(proyectoActual.getNombre(), proyectoDb.getNombre());
     }
 
     @When("^el empleado borra un proyecto que no existe")
     public void whenElEmpleadoBorraUnProyectoQueNoExiste() {
-        Assertions.assertThrows(EmptyResultDataAccessException.class, ()->proyectoRepository.deleteById(0));
+        proyectosEsperados = (ArrayList<Proyecto>) proyectoRepository.findAll();
+        latestResponse  = testRestTemplate.exchange(
+                "http://localhost:8080/proyectos/{id}",
+                HttpMethod.DELETE,
+                new HttpEntity<Proyecto>(new HttpHeaders()),
+                Proyecto.class,
+                -10
+        );
+    }
+
+    @Then("^no se borra ningun proyecto")
+    public void thenNoSeBorraNingunProyecto() {
+        ArrayList<Proyecto> proyectosActuales = (ArrayList<Proyecto>) proyectoRepository.findAll();
+        Assertions.assertTrue(assertArray(proyectosEsperados, proyectosActuales));
     }
 
     private boolean assertArray(ArrayList<Proyecto> p1, ArrayList<Proyecto> p2){

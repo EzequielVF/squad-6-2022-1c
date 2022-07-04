@@ -21,7 +21,7 @@ public class Proyecto {
     private String descripcion;
     private long legajoLider;
 
-    @OneToMany(cascade = {CascadeType.REMOVE})
+    @OneToMany(cascade = {CascadeType.REMOVE, CascadeType.ALL})
     private final List<Tarea> tareas = new ArrayList<>();
 
     public Proyecto(){

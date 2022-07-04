@@ -1,5 +1,9 @@
 package com.aninfo.proyectos.model;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.CascadeType;
 import java.util.List;
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,7 +22,10 @@ public class Tarea {
     private int idTicket;
     private int idProyecto;
 
-    @ElementCollection
+    @ElementCollection()
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @Cascade(value={CascadeType.ALL})
+    @JoinColumn(columnDefinition = "tareas")
     private final List<Long> empleados = new ArrayList<>();
 
     public Tarea(){

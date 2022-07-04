@@ -73,7 +73,7 @@ public class TareaController {
         tareaService.updateTarea(id, tarea);
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/tareas/{id1}/empleado/{id2}")
+    @RequestMapping(method=RequestMethod.PUT, value="/tareas/{id1}/empleados/{id2}")
     public void addEmpleadoToTarea(@PathVariable("id1")int id_tarea, @PathVariable("id2") long legajo){
         tareaService.addEmpleadoToTarea(id_tarea, legajo);
     }
