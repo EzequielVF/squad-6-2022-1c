@@ -7,6 +7,7 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.When;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.Given;
+import org.junit.function.ThrowingRunnable;
 import org.springframework.http.*;
 import com.aninfo.proyectos.model.Tarea;
 import org.junit.jupiter.api.Assertions;
@@ -19,16 +20,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 
+import javax.persistence.Entity;
+import javax.persistence.EntityNotFoundException;
+
 @SpringBootTest
 @Transactional
 public class TareaTest {
     private final TestRestTemplate testRestTemplate = new TestRestTemplate();
     private final Tarea tareaEsperada = new Tarea();
     private final ArrayList<Tarea> tareasEsperadas = new ArrayList<Tarea>();
-    private Proyecto proyecto = new Proyecto();
-    private Proyecto proyecto2 = new Proyecto();
-    private Tarea tarea1 = new Tarea();
-    private Tarea tarea2 = new Tarea();
+    private final Proyecto proyecto = new Proyecto();
+    private final Proyecto proyecto2 = new Proyecto();
+    private final Tarea tarea1 = new Tarea();
+    private final Tarea tarea2 = new Tarea();
     private ResponseEntity<Tarea> latestResponse;
     private ResponseEntity<Tarea[]> latestResponseArray;
 
@@ -77,6 +81,23 @@ public class TareaTest {
         Assertions.assertEquals(id, tareasActuales.get(0).getIdProyecto());
     }
 
+    @Given("^no hay proyectos")
+    public void givenNoHayProyectos() {
+        // No hay proyectos
+    }
+
+    @When("^el empleado agrega una tarea sin proyecto")
+    public void whenElEmpleadoAgregaUnaTareaSinProyecto() {
+        latestResponse = testRestTemplate.postForEntity("https://moduloproyectos.herokuapp.com/tareas", tarea1, Tarea.class);
+    }
+
+    @Then("^la tarea se agrega")
+    public void thenLaTareaSeAgrega() {
+        int idTarea = tarea1.getId();
+        Tarea tareaActual = tareaRepository.getReferenceById(idTarea);
+        Assertions.assertNotNull(tareaActual);
+    }
+
     @And("^se recibe un status code de (\\d+)")
     public void andSeRecibeUnStatusCodeDe(int statusCode) {
         HttpStatus currentStatusCode = null;
@@ -87,6 +108,7 @@ public class TareaTest {
         }
         Assertions.assertEquals(statusCode, currentStatusCode.value());
     }
+
 
     @Given("^un proyecto con tareas")
     public void givenUnProyectoConTareas() {
@@ -102,7 +124,8 @@ public class TareaTest {
         int idProyecto = proyecto.getId();
         latestResponseArray = testRestTemplate.getForEntity("https://moduloproyectos.herokuapp.com/proyectos/{id}/tareas", Tarea[].class, idProyecto);
         Tarea[] tareas = latestResponseArray.getBody();
-        Collections.addAll(tareasEsperadas, tareas);
+        if (tareas != null)
+            Collections.addAll(tareasEsperadas, tareas);
     }
 
     @Then("^se devuelven todas las tareas del proyecto")
@@ -111,6 +134,33 @@ public class TareaTest {
         Assertions.assertEquals(tareasEsperadas.size(), tareasActuales.size());
         Assertions.assertTrue(assertArray(tareasEsperadas, tareasActuales));
     }
+
+
+    @Given("^varios proyectos con tareas")
+    public void givenVariosProyectosConTareas() {
+        tareaRepository.save(tarea1);
+        tareaRepository.save(tarea2);
+        proyecto.addTarea(tarea1);
+        proyecto2.addTarea(tarea2);
+        proyectoRepository.save(proyecto);
+        proyectoRepository.save(proyecto2);
+    }
+
+    @When("^el empleado pide todas las tareas")
+    public void whenElEmpleadoPideTodasLasTareas() {
+        latestResponseArray = testRestTemplate.getForEntity("https://moduloproyectos.herokuapp.com/tareas", Tarea[].class);
+        Tarea[] tareas = latestResponseArray.getBody();
+        if (tareas != null)
+            Collections.addAll(tareasEsperadas, tareas);
+    }
+
+    @Then("^se devuelven todas las tareas")
+    public void thenSeDevuelvenTodasLasTareas() {
+        ArrayList<Tarea> tareasActuales = (ArrayList<Tarea>) tareaRepository.findAll();
+        Assertions.assertEquals(tareasEsperadas.size(), tareasActuales.size());
+        Assertions.assertTrue(assertArray(tareasEsperadas, tareasActuales));
+    }
+
 
     @When("^el empleado borra una tarea del proyecto")
     public void elEmpleadoBorraUnaTareaDelProyecto() {
@@ -130,28 +180,28 @@ public class TareaTest {
         Assert.assertEquals(1, (proyectoRepository.getReferenceById(proyecto.getId())).getTareas().size());
     }
 
-    @Given("^varios proyectos con tareas")
-    public void givenVariosProyectosConTareas() {
-        tareaRepository.save(tarea1);
-        tareaRepository.save(tarea2);
-        proyecto.addTarea(tarea1);
-        proyecto2.addTarea(tarea2);
-        proyectoRepository.save(proyecto);
-        proyectoRepository.save(proyecto2);
+
+    @When("^el empleado borra un proyecto con tareas")
+    public void whenElEmpleadoBorraUnProyectoConTareas() {
+        int idProyecto = proyecto.getId();
+
+        testRestTemplate.exchange(
+                "https://moduloproyectos.herokuapp.com/proyectos/{id}",
+                HttpMethod.DELETE,
+                new HttpEntity<Tarea>(new HttpHeaders()),
+                Proyecto.class,
+                idProyecto
+        );
     }
 
-    @When("^el empleado pide todas las tareas")
-    public void whenElEmpleadoPideTodasLasTareas() {
-        latestResponseArray = testRestTemplate.getForEntity("https://moduloproyectos.herokuapp.com/tareas", Tarea[].class);
-        Tarea[] tareas = latestResponseArray.getBody();
-        Collections.addAll(tareasEsperadas, tareas);
-    }
-
-    @Then("^se devuelven todas las tareas")
-    public void thenSeDevuelvenTodasLasTareas() {
-        ArrayList<Tarea> tareasActuales = (ArrayList<Tarea>) tareaRepository.findAll();
-        Assertions.assertEquals(tareasEsperadas.size(), tareasActuales.size());
-        Assertions.assertTrue(assertArray(tareasEsperadas, tareasActuales));
+    @Then("^las tareas se borran")
+    public void thenLasTareasSeBorran() {
+        int idTarea1 = tarea1.getId();
+        int idTarea2 = tarea2.getId();
+        Assert.assertThrows(EntityNotFoundException.class, () ->
+            {Assert.assertNull(tareaRepository.getReferenceById(idTarea1));});
+        Assert.assertThrows(EntityNotFoundException.class, () ->
+            {Assert.assertNull(tareaRepository.getReferenceById(idTarea2));});
     }
 
     private boolean assertArray(ArrayList<Tarea> t1, ArrayList<Tarea> t2){

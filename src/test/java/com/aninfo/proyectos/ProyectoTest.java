@@ -97,15 +97,27 @@ public class ProyectoTest {
         Assertions.assertTrue(assertArray(proyectosEsperados, proyectosActuales));
     }
 
+    @When("^el empleado pide un proyecto")
+    public void whenElEmpleadoPideUnProyecto() {
+        int idProyecto = proyectoEsperado.getId();
+        latestResponse = testRestTemplate.getForEntity("https://moduloproyectos.herokuapp.com/proyectos/{id}", Proyecto.class, idProyecto);
+    }
+
+    @Then("^se devuelve el proyecto pedido")
+    public void thenSeDevuelveElProyectoPedido() {
+        Proyecto proyectoActual = proyectoRepository.getReferenceById(proyectoEsperado.getId());
+        Assertions.assertEquals(latestResponse.getBody().getId(), proyectoActual.getId());
+    }
+
     @When("^el empleado borra un proyecto sin tareas")
     public void whenElEmpleadoBorraUnProyectoSinTareas() {
-        int id = proyectoDb.getId();
+        int idProyecto = proyectoDb.getId();
         latestResponse  = testRestTemplate.exchange(
                 "https://moduloproyectos.herokuapp.com/proyectos/{id}",
                 HttpMethod.DELETE,
                 new HttpEntity<Proyecto>(new HttpHeaders()),
                 Proyecto.class,
-                id
+                idProyecto
         );
     }
 
@@ -130,6 +142,24 @@ public class ProyectoTest {
     public void thenNoSeBorraNingunProyecto() {
         ArrayList<Proyecto> proyectosActuales = (ArrayList<Proyecto>) proyectoRepository.findAll();
         Assertions.assertTrue(assertArray(proyectosEsperados, proyectosActuales));
+    }
+
+
+
+    @When("^el empleado borra todos los proyectos")
+    public void whenElEmpleadoBorraTodosLosProyectos() {
+        latestResponseArray  = testRestTemplate.exchange(
+                "https://moduloproyectos.herokuapp.com/proyectos",
+                HttpMethod.DELETE,
+                new HttpEntity<Proyecto>(new HttpHeaders()),
+                Proyecto[].class
+        );
+    }
+
+    @Then("^se borran todos los proyectos")
+    public void thenSeBorranTodosLosProyectos() {
+        Assert.assertFalse((proyectoRepository.findById(proyectoEsperado.getId()).isPresent()));
+        Assert.assertFalse((proyectoRepository.findById(proyectoDb.getId()).isPresent()));
     }
 
     private boolean assertArray(ArrayList<Proyecto> p1, ArrayList<Proyecto> p2){
