@@ -38,7 +38,6 @@ public class TareaService {
             t.setEstado(tarea.getEstado());
             t.setDescripcion(tarea.getDescripcion());
             t.setIdTicket(tarea.getIdTicket());
-            t.setIdProyecto(tarea.getIdProyecto());
             t.setFechaCreacion(tarea.getFechaCreacion());
             tareaRepository.save(t);
         }
@@ -69,11 +68,7 @@ public class TareaService {
         }
     }
 
-    public void deleteAllTareas() {
-        tareaRepository.deleteAll();
-    }
-
-    public void addTicketToTarea(int id_tarea, int id_ticket) {
+    public void setTicketOfTarea(int id_tarea, int id_ticket) {
         if (tareaRepository.findById(id_tarea).isPresent()){
             Tarea t = tareaRepository.getReferenceById(id_tarea);
             t.setIdTicket(id_ticket);

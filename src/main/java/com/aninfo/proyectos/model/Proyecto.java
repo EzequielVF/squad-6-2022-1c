@@ -73,6 +73,19 @@ public class Proyecto {
         tareas.add(tarea);
     }
 
+    public void updateTarea(int id_tarea, Tarea tarea){
+        Tarea t = findTarea(id_tarea);
+        t.setNombre(tarea.getNombre());
+        t.setEstado(tarea.getEstado());
+        t.setDescripcion(tarea.getDescripcion());
+        t.setIdTicket(tarea.getIdTicket());
+        t.setFechaCreacion(tarea.getFechaCreacion());
+    }
+
+    public Tarea getTarea(int id_tarea){
+        return findTarea(id_tarea);
+    }
+
     public void deleteTarea(int id){
         tareas.removeIf(tarea -> tarea.getId() == id);
     }
@@ -95,5 +108,16 @@ public class Proyecto {
 
     public String getDescripcion(){
         return this.descripcion;
+    }
+
+    private Tarea findTarea(int id){
+        Tarea tarea = null;
+        for (Tarea t : this.tareas){
+            if (t.getId() == id){
+                tarea = t;
+                break;
+            }
+        }
+        return tarea;
     }
 }

@@ -84,9 +84,8 @@ public class ProyectoService {
             throw new NoExisteProyectoException();
         }
         Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
-        tareaService.addTarea(tarea);
-        proyecto.deleteTarea(id_tarea);
-        proyecto.addTarea(tarea);
+        proyecto.updateTarea(id_tarea, tarea);
+        tareaService.updateTarea(id_tarea, tarea);
         proyectoRepository.save(proyecto);
     }
 
@@ -108,13 +107,6 @@ public class ProyectoService {
             proyecto.setLegajoLider(legajo);
             proyectoRepository.save(proyecto);
         }
-    }
-
-    public void addTareaExistenteToProyecto(int id_proyecto, int id_tarea) throws NoExisteTareaException {
-        Tarea tarea = tareaService.getTarea(id_tarea);
-        Proyecto proyecto = proyectoRepository.findById(id_proyecto).get();
-        proyecto.addTarea(tarea);
-        proyectoRepository.save(proyecto);
     }
 
     public boolean empleadoEstaEnTarea(int id_proyecto, int id_tarea, long legajo) {
@@ -149,5 +141,43 @@ public class ProyectoService {
             }
         }
         return estaEnProyecto;
+    }
+
+    public void addEmpleadoToTareaFromProyecto(int id_proyecto, int id_tarea, long legajo) throws NoExisteTareaException {
+        if (proyectoRepository.findById(id_proyecto).isPresent()){
+            Proyecto proyecto = proyectoRepository.getReferenceById(id_proyecto);
+            Tarea tarea = proyecto.getTarea(id_tarea);
+            tarea.addEmpleado(legajo);
+            tareaService.addEmpleadoToTarea(id_tarea, legajo);
+            proyectoRepository.save(proyecto);
+        }
+    }
+
+    public void deleteEmpleadoFromTareaOfProyecto(int id_proyecto, int id_tarea, long legajo) throws NoExisteTareaException {
+        if (proyectoRepository.findById(id_proyecto).isPresent()){
+            Proyecto p = proyectoRepository.getReferenceById(id_proyecto);
+            Tarea tarea = p.getTarea(id_tarea);
+            tarea.deleteEmpleado(legajo);
+            tareaService.deleteEmpleadoFromTarea(id_tarea, legajo);
+            proyectoRepository.save(p);
+        }
+    }
+
+    public void setTicketToTareaFromProyecto(int id_proyecto, int id_tarea, int id_ticket) {
+        if (proyectoRepository.findById(id_proyecto).isPresent()){
+            Proyecto p = proyectoRepository.getReferenceById(id_proyecto);
+            Tarea tarea = p.getTarea(id_tarea);
+            tarea.setIdTicket(id_ticket);
+            tareaService.setTicketOfTarea(id_tarea, id_ticket);
+            proyectoRepository.save(p);
+        }
+    }
+
+    public Tarea getTareaFromProyecto(int id_proyecto, int id_tarea) throws NoExisteProyectoException {
+        if (!proyectoRepository.findById(id_proyecto).isPresent()){
+            throw  new NoExisteProyectoException();
+        }
+        Proyecto p = proyectoRepository.getReferenceById(id_proyecto);
+        return p.getTarea(id_tarea);
     }
 }

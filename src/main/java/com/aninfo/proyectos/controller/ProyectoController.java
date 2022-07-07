@@ -30,6 +30,11 @@ public class ProyectoController {
         return proyectoService.getProyecto(id);
     }
 
+    @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id1}/tareas/{id2}")
+    public Tarea getTareaFromProyecto(@PathVariable("id1") int id_proyecto, @PathVariable("id2")int id_tarea) throws NoExisteProyectoException {
+        return proyectoService.getTareaFromProyecto(id_proyecto, id_tarea);
+    }
+
     @RequestMapping(method=RequestMethod.GET, value="/proyectos/{id}/tareas")
     public ArrayList<Tarea> getAllTareasFromProyecto(@PathVariable("id") int id) throws NoExisteProyectoException {
         return proyectoService.getAllTareasFromProyecto(id);
@@ -66,6 +71,11 @@ public class ProyectoController {
         proyectoService.deleteTareaFromProyecto(id_proyecto, id_tarea);
     }
 
+    @RequestMapping(method=RequestMethod.DELETE, value="/proyectos/{id1}/tareas/{id2}/empleados/{id3}")
+    public void deleteEmpleadoFromTareaOfProyecto(@PathVariable("id1")int id_proyecto, @PathVariable("id2")int id_tarea, @PathVariable("id3")long legajo) throws NoExisteTareaException {
+        proyectoService.deleteEmpleadoFromTareaOfProyecto(id_proyecto, id_tarea, legajo);
+    }
+
     @RequestMapping(method=RequestMethod.DELETE, value="/proyectos")
     public void deleteAllProyectos(){
         proyectoService.deleteAllProyectos();
@@ -90,8 +100,13 @@ public class ProyectoController {
         proyectoService.setLiderOfProyecto(id_proyecto, legajo);
     }
 
-    @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/tarea_existente/{id2}")
-    public void addTareaExistenteToProyecto(@PathVariable("id1")int id_proyecto, @PathVariable("id2")int id_tarea) throws NoExisteTareaException {
-        proyectoService.addTareaExistenteToProyecto(id_proyecto, id_tarea);
+    @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/tareas/{id2}/empleados/{id3}")
+    public void addEmpleadoToTareaFromProyecto(@PathVariable("id1")int id_proyecto, @PathVariable("id2") int id_tarea, @PathVariable("id3") long legajo) throws NoExisteTareaException {
+        proyectoService.addEmpleadoToTareaFromProyecto(id_proyecto, id_tarea, legajo);
+    }
+
+    @RequestMapping(method=RequestMethod.PUT, value="/proyectos/{id1}/tareas/{id2}/tickets/{id3}")
+    public void setTicketToTareaFromProyecto(@PathVariable("id1")int id_proyecto, @PathVariable("id2") int id_tarea, @PathVariable("id3") int id_ticket){
+        proyectoService.setTicketToTareaFromProyecto(id_proyecto, id_tarea, id_ticket);
     }
 }

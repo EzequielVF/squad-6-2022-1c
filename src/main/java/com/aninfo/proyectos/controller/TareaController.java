@@ -32,49 +32,4 @@ public class TareaController {
     public ArrayList<Tarea> getTareasFromTicket(@PathVariable("id") int id){
         return tareaService.getAllTareasFromTicket(id);
     }
-
-    /*
-     * POST REQUESTS /////////////////////////////////////////////////////////////////////////////////
-     * */
-
-    @RequestMapping(method=RequestMethod.POST, value="/tareas")
-    public void addTarea(@RequestBody Tarea tarea){ tareaService.addTarea(tarea); }
-
-    @RequestMapping(method=RequestMethod.POST, value="/tareas/{id1}/tickets/{id2}")
-    public void addTicketToTarea(@PathVariable("id1")int id_tarea, @PathVariable("id2")int id_ticket){
-        tareaService.addTicketToTarea(id_tarea, id_ticket);
-    }
-
-    /*
-     * DELETE REQUESTS /////////////////////////////////////////////////////////////////////////////////
-     * */
-
-    @RequestMapping(method=RequestMethod.DELETE, value="/tareas/{id}")
-    public void deleteTarea(@PathVariable("id") int id){
-        tareaService.deleteTarea(id);
-    }
-
-    @RequestMapping(method=RequestMethod.DELETE, value="/tareas")
-    public void deleteAllTareas(){
-        tareaService.deleteAllTareas();
-    }
-
-    @RequestMapping(method=RequestMethod.DELETE, value="/tareas/{id1}/empleados/{id2}")
-    public void deleteEmpleadoFromTarea(@PathVariable("id1")int id_tarea, @PathVariable("id2") long legajo){
-        tareaService.deleteEmpleadoFromTarea(id_tarea, legajo);
-    }
-
-    /*
-     * PUT REQUESTS /////////////////////////////////////////////////////////////////////////////////
-     * */
-
-    @RequestMapping(method=RequestMethod.PUT, value="/tareas/{id}")
-    public void updateTarea(@PathVariable("id") int id, @RequestBody Tarea tarea){
-        tareaService.updateTarea(id, tarea);
-    }
-
-    @RequestMapping(method=RequestMethod.PUT, value="/tareas/{id1}/empleados/{id2}")
-    public void addEmpleadoToTarea(@PathVariable("id1")int id_tarea, @PathVariable("id2") long legajo){
-        tareaService.addEmpleadoToTarea(id_tarea, legajo);
-    }
 }
