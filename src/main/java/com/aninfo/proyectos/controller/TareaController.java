@@ -2,6 +2,9 @@ package com.aninfo.proyectos.controller;
 
 import java.util.ArrayList;
 import com.aninfo.proyectos.model.Tarea;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.*;
 import com.aninfo.proyectos.service.TareaService;
 import com.aninfo.proyectos.exception.NoExisteTareaException;
@@ -31,5 +34,15 @@ public class TareaController {
     @RequestMapping(method=RequestMethod.GET, value="/tickets/{id}/tareas")
     public ArrayList<Tarea> getTareasFromTicket(@PathVariable("id") int id){
         return tareaService.getAllTareasFromTicket(id);
+    }
+
+    @RequestMapping(method=RequestMethod.GET, value="/tareas/{id}/tickets")
+    public JSONObject getTicketFromTarea(@PathVariable("id")int id_tarea) throws ParseException {
+        return tareaService.getTicketFromTarea(id_tarea);
+    }
+
+    @RequestMapping(method=RequestMethod.GET, value="/tickets")
+    public JSONArray getTickets() throws ParseException {
+        return tareaService.getTickets();
     }
 }

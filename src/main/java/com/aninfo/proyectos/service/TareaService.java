@@ -3,10 +3,15 @@ package com.aninfo.proyectos.service;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import com.aninfo.proyectos.model.Tarea;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import com.aninfo.proyectos.repository.TareaRepository;
 import com.aninfo.proyectos.exception.NoExisteTareaException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
 
 @Service
 public class TareaService {
@@ -74,5 +79,21 @@ public class TareaService {
             t.setIdTicket(id_ticket);
             tareaRepository.save(t);
         }
+    }
+
+    public JSONObject getTicketFromTarea(int id_tarea) throws ParseException {
+        RestTemplate restTemplate = new RestTemplate();
+        JSONParser parser = new JSONParser();
+        Tarea t = tareaRepository.getReferenceById(id_tarea);
+        String request = "https://psa-soporte-mvp.herokuapp.com/soporte/ticket/"+String.valueOf(t.getIdTicket());
+        return (JSONObject) parser.parse(restTemplate.getForObject(request, String.class));
+    }
+
+    public JSONArray getTickets() throws ParseException {
+        /*RestTemplate restTemplate = new RestTemplate();
+        JSONParser parser = new JSONParser();
+        String request = "https://psa-soporte-mvp.herokuapp.com/soporte/tickets";
+        return (JSONArray) parser.parse(restTemplate.getForObject(request, String.class));*/
+        return new JSONArray();
     }
 }
