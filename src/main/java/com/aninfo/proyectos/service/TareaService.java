@@ -90,10 +90,9 @@ public class TareaService {
     }
 
     public JSONArray getTickets() throws ParseException {
-        /*RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = new RestTemplate();
         JSONParser parser = new JSONParser();
         String request = "https://psa-soporte-mvp.herokuapp.com/soporte/tickets";
-        return (JSONArray) parser.parse(restTemplate.getForObject(request, String.class));*/
-        return new JSONArray();
+        return (JSONArray) parser.parse(restTemplate.getForObject(request, String.class));
     }
 }
